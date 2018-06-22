@@ -1,5 +1,6 @@
 package com.guoziwei.klinelib.chart;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
@@ -16,13 +17,13 @@ import java.util.List;
 
 /**
  * Created by dell on 2017/9/28.
+ * 多表联动缩放
  */
-
 public class InfoViewListener implements OnChartValueSelectedListener {
 
     private List<HisData> mList;
     private double mLastClose;
-    private ChartInfoView mInfoView;
+    private ChartInfoView mInfoView;//选中后的提示信息
     private int mWidth;
     /**
      * if otherChart not empty, highlight will disappear after 3 second
@@ -44,6 +45,7 @@ public class InfoViewListener implements OnChartValueSelectedListener {
         mOtherChart = otherChart;
     }
 
+    @SuppressLint("RtlHardcoded")
     @Override
     public void onValueSelected(Entry e, Highlight h) {
         int x = (int) e.getX();
@@ -52,7 +54,7 @@ public class InfoViewListener implements OnChartValueSelectedListener {
             mInfoView.setData(mLastClose, mList.get(x));
         }
         FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mInfoView.getLayoutParams();
-        if (h.getXPx() < mWidth / 2) {
+        if (h.getXPx() < mWidth / 2) {// getXPx()高亮点的X坐标
             lp.gravity = Gravity.RIGHT;
         } else {
             lp.gravity = Gravity.LEFT;

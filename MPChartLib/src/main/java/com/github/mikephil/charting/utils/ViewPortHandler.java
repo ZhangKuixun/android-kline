@@ -8,6 +8,7 @@ import android.view.View;
 /**
  * Class that contains information about the charts current viewport settings, including offsets, scale & translation
  * levels, ...
+ * 包含有关图表当前视图端口设置的信息的类，包括偏移、缩放和翻译。
  *
  * @author Philipp Jahoda
  */
@@ -225,6 +226,7 @@ public class ViewPortHandler {
 
     /**
      * Zooms out to original size.
+     *
      * @param outputMatrix
      */
     public void resetZoom(Matrix outputMatrix) {

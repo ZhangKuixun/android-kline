@@ -24,7 +24,7 @@ public class CombinedHighlighter extends ChartHighlighter<CombinedDataProvider> 
     public CombinedHighlighter(CombinedDataProvider chart, BarDataProvider barChart) {
         super(chart);
 
-        // if there is BarData, create a BarHighlighter
+        // if there is BarData, create a BarHighlighter 如果有 BarData，创建一个 BarHighlighter
         barHighlighter = barChart.getBarData() == null ? null : new BarHighlighter(barChart);
     }
 

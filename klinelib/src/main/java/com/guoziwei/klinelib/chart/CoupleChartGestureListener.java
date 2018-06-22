@@ -11,6 +11,7 @@ import com.github.mikephil.charting.listener.OnChartGestureListener;
 
 /**
  * http://stackoverflow.com/questions/28521004/mpandroidchart-have-one-graph-mirror-the-zoom-swipes-on-a-sister-graph
+ * 多个图表之间滚动时联动
  */
 public class CoupleChartGestureListener implements OnChartGestureListener {
 

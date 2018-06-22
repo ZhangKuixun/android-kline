@@ -772,6 +772,7 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
      * Limits the maximum and minimum x range that can be visible by pinching and zooming. e.g. minRange=10, maxRange=100 the
      * smallest range to be displayed at once is 10, and no more than a range of 100 values can be viewed at once without
      * scrolling
+     * 设置可见x范围
      *
      * @param minXRange
      * @param maxXRange
@@ -1186,7 +1187,7 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
 
     /**
      * When enabled, the values will be clipped to contentRect,
-     *   otherwise they can bleed outside the content rect.
+     * otherwise they can bleed outside the content rect.
      *
      * @param enabled
      */
@@ -1196,7 +1197,7 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
 
     /**
      * When enabled, the values will be clipped to contentRect,
-     *   otherwise they can bleed outside the content rect.
+     * otherwise they can bleed outside the content rect.
      *
      * @return
      */

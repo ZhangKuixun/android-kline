@@ -6,7 +6,7 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import java.util.List;
 
 /**
- * Data object that represents all data for the BarChart.
+ * Data object that represents all data for the BarChart.表示 BarChart 的所有数据的数据对象。
  *
  * @author Philipp Jahoda
  */

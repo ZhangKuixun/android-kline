@@ -11,6 +11,6 @@
 
      重写了这个方法，修复个数少的时候的crash
 
-3 Chart 加了 getRealCount系列方法
+3 Chart 加了 getRealCount 系列方法
 
 4 BarLineChartTouchListener 393行开始改写

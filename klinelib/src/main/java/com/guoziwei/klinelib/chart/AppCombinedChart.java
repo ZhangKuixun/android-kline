@@ -49,7 +49,7 @@ public class AppCombinedChart extends CombinedChart {
     public void setData(CombinedData data) {
         try {
             super.setData(data);
-        }catch (ClassCastException e) {
+        } catch (ClassCastException e) {
             // ignore
         }
         ((AppCombinedChartRenderer) mRenderer).createRenderers();

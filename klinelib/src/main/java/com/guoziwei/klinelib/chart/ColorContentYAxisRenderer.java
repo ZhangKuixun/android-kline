@@ -17,13 +17,14 @@ import static com.github.mikephil.charting.utils.Utils.convertDpToPixel;
 
 /**
  * 为每个label设置颜色，把两端的label绘制在内容区域内
+ * 颜色内容Y轴渲染器
  */
 
 public class ColorContentYAxisRenderer extends YAxisRenderer {
     private int[] mLabelColorArray;
     private boolean mLabelInContent = false;
     private boolean mUseDefaultLabelXOffset = true;
-    private boolean mUseDefaultLimitLineLabelXOffset=true;
+    private boolean mUseDefaultLimitLineLabelXOffset = true;
 
     public ColorContentYAxisRenderer(ViewPortHandler viewPortHandler, YAxis yAxis, Transformer trans) {
         super(viewPortHandler, yAxis, trans);
@@ -127,9 +128,9 @@ public class ColorContentYAxisRenderer extends YAxisRenderer {
 
             if (mLabelInContent) {
                 if (i == from) {
-                    y = y - offset - space-1F;
+                    y = y - offset - space - 1F;
                 } else if (i == (to - 1)) {
-                    y = y - yoffset + textHeight + space+1F;
+                    y = y - yoffset + textHeight + space + 1F;
                 }
             }
 
@@ -199,7 +200,7 @@ public class ColorContentYAxisRenderer extends YAxisRenderer {
                 final LimitLine.LimitLabelPosition position = l.getLabelPosition();
 
                 if (!mUseDefaultLimitLineLabelXOffset) {
-                    xOffset= convertDpToPixel(1f);
+                    xOffset = convertDpToPixel(1f);
                 }
 
                 if (position == LimitLine.LimitLabelPosition.RIGHT_TOP) {

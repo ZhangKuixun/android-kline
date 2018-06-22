@@ -57,18 +57,18 @@ class BaseView extends LinearLayout {
         mIncreasingColor = ContextCompat.getColor(getContext(), R.color.increasing_color);
     }
 
+    //底部柱状图
     protected void initBottomChart(AppCombinedChart chart) {
-        chart.setScaleEnabled(true);
-        chart.setDrawBorders(false);
+        chart.setScaleEnabled(true);//启用/禁用缩放图表上的两个轴。
+        chart.setDrawBorders(false);//启用/禁用绘制图表边框（chart周围的线）
         chart.setBorderWidth(1);
-        chart.setDragEnabled(true);
-        chart.setScaleYEnabled(false);
-        chart.setAutoScaleMinMaxEnabled(true);
+        chart.setDragEnabled(true);//启用/禁用拖动（平移）图表。
+        chart.setScaleYEnabled(false);// 启用/禁用缩放在y轴。
+        chart.setAutoScaleMinMaxEnabled(true);//标志，指示自动缩放在y轴已启用。如果启用Y轴自动调整到最小和当前的X轴的范围，只要视口变化的最大y值。 这是图表显示的财务数据特别有趣
         chart.setDragDecelerationEnabled(false);
         chart.setHighlightPerDragEnabled(false);
         Legend lineChartLegend = chart.getLegend();
         lineChartLegend.setEnabled(false);
-
 
         XAxis xAxisVolume = chart.getXAxis();
         xAxisVolume.setDrawLabels(true);
@@ -77,7 +77,7 @@ class BaseView extends LinearLayout {
         xAxisVolume.setTextColor(mAxisColor);
         xAxisVolume.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxisVolume.setLabelCount(3, true);
-        xAxisVolume.setAvoidFirstLastClipping(true);
+        xAxisVolume.setAvoidFirstLastClipping(true);//如果设置为true，则在绘制时会避免“剪掉”在x轴上的图表或屏幕边缘的第一个和最后一个坐标轴标签项。
         xAxisVolume.setAxisMinimum(-0.5f);
 
         xAxisVolume.setValueFormatter(new IAxisValueFormatter() {
@@ -118,8 +118,8 @@ class BaseView extends LinearLayout {
                 }
                 return String.format(Locale.getDefault(), "%1$5s", s);
             }
-        });
-*/
+        });*/
+
         Transformer leftYTransformer = chart.getRendererLeftYAxis().getTransformer();
         ColorContentYAxisRenderer leftColorContentYAxisRenderer = new ColorContentYAxisRenderer(chart.getViewPortHandler(), chart.getAxisLeft(), leftYTransformer);
         leftColorContentYAxisRenderer.setLabelInContent(true);

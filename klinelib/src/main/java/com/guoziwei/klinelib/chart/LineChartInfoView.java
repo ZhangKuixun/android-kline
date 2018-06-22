@@ -36,10 +36,10 @@ public class LineChartInfoView extends ChartInfoView {
     public LineChartInfoView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         LayoutInflater.from(context).inflate(R.layout.view_line_chart_info, this);
-        mTvTime = (TextView) findViewById(R.id.tv_time);
-        mTvPrice = (TextView) findViewById(R.id.tv_price);
-        mTvChangeRate = (TextView) findViewById(R.id.tv_change_rate);
-        mTvVol = (TextView) findViewById(R.id.tv_vol);
+        mTvTime = findViewById(R.id.tv_time);
+        mTvPrice = findViewById(R.id.tv_price);
+        mTvChangeRate = findViewById(R.id.tv_change_rate);
+        mTvVol = findViewById(R.id.tv_vol);
     }
 
     @Override

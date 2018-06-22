@@ -75,6 +75,9 @@ public class DataUtils {
         return list;
     }
 
+    /**
+     * 计算数据
+     */
     public static List<HisData> calculateHisData(List<HisData> list) {
         return calculateHisData(list, null);
     }
@@ -119,7 +122,7 @@ public class DataUtils {
     }
 
     /**
-     * calculate MA value, return a double list
+     * calculate MA value, return a double list 计算MA值，返回double类型的list
      * @param dayCount for example: 5, 10, 20, 30
      */
     public static List<Double> calculateMA(int dayCount, List<HisData> data) {

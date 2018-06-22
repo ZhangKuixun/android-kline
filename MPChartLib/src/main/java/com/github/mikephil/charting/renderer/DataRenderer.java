@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
-import android.graphics.drawable.Drawable;
 
 import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.data.Entry;
@@ -14,12 +13,12 @@ import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.dataprovider.ChartInterface;
 import com.github.mikephil.charting.interfaces.datasets.IDataSet;
-import com.github.mikephil.charting.utils.MPPointF;
 import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
 /**
  * Superclass of all render classes for the different data types (line, bar, ...).
+ * 数据渲染器
  *
  * @author Philipp Jahoda
  */
@@ -33,14 +32,14 @@ public abstract class DataRenderer extends Renderer {
     /**
      * main paint object used for rendering
      */
-    protected Paint mRenderPaint;
+    protected Paint mRenderPaint;//渲染画笔
 
     /**
      * paint used for highlighting values
      */
-    protected Paint mHighlightPaint;
+    protected Paint mHighlightPaint;//高亮画笔
 
-    protected Paint mDrawPaint;
+    protected Paint mDrawPaint;//画画画笔
 
     /**
      * paint object for drawing values (text representing values of chart

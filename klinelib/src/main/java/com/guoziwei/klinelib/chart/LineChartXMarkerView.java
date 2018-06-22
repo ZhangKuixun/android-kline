@@ -4,6 +4,7 @@ package com.guoziwei.klinelib.chart;
  * Created by Administrator on 2016/2/1.
  */
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.widget.TextView;
 
@@ -21,6 +22,7 @@ import java.util.List;
  *
  * @author Philipp Jahoda
  */
+@SuppressLint("ViewConstructor")
 public class LineChartXMarkerView extends MarkerView {
 
     private List<HisData> mList;
@@ -29,7 +31,7 @@ public class LineChartXMarkerView extends MarkerView {
     public LineChartXMarkerView(Context context, List<HisData> list) {
         super(context, R.layout.view_mp_real_price_marker);
         mList = list;
-        tvContent = (TextView) findViewById(R.id.tvContent);
+        tvContent = findViewById(R.id.tvContent);
     }
 
 

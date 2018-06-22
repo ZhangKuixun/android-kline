@@ -22,8 +22,8 @@ import com.github.mikephil.charting.renderer.CombinedChartRenderer;
  *
  * @author Philipp Jahoda
  */
-public class CombinedChart extends BarLineChartBase<CombinedData> implements CombinedDataProvider {
 
+    public class CombinedChart extends BarLineChartBase<CombinedData> implements CombinedDataProvider {
     /**
      * if set to true, all values are drawn above their bars, instead of below
      * their top

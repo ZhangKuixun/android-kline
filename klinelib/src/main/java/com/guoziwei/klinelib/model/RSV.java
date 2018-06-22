@@ -12,8 +12,8 @@ public class RSV {
 
     public RSV(List<HisData> OHLCData, int m) {
         n = m;
-        rsv = new ArrayList<Double>();
-        ArrayList<Double> r = new ArrayList<Double>();
+        rsv = new ArrayList<>();
+        ArrayList<Double> r = new ArrayList<>();
         double rs = 0.0;
 
         if (OHLCData != null && OHLCData.size() > 0) {

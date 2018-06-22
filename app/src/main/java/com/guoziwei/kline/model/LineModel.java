@@ -16,8 +16,8 @@ public class LineModel {
 
     private String time;
     private double price;
-    private long volume;
-    private double average;
+    private long volume;//体积
+    private double average;//平均的
 
     public String getTime() {
         return time;
