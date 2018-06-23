@@ -31,7 +31,7 @@ public class ChartInfoViewHandler implements View.OnTouchListener {
             public void onLongPress(MotionEvent e) {
                 super.onLongPress(e);
                 mIsLongPress = true;
-                Highlight h = mChart.getHighlightByTouchPoint(e.getX(), e.getY());
+                Highlight h = mChart.getHighlightByTouchPoint(e.getX(), e.getY());//通过触摸点获得亮点
                 if (h != null) {
                     mChart.highlightValue(h, true);
                     mChart.disableScroll();
@@ -59,7 +59,7 @@ public class ChartInfoViewHandler implements View.OnTouchListener {
                 mChart.highlightValue(h, true);
                 mChart.disableScroll();
             }
-            //将事件传递给了GestureDetector  然后它内部将事件进行判断识别  调用监听器中的对应方法
+            //将事件传递给了 GestureDetector  然后它内部将事件进行判断识别  调用监听器中的对应方法
             //最终实现事件的处理
             return true;
         }

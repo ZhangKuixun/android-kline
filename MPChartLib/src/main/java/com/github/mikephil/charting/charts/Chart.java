@@ -278,8 +278,7 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
     // }
 
     /**
-     * Sets a new data object for the chart. The data object contains all values
-     * and information needed for displaying.
+     * 为图表设置新的数据对象。数据对象包含用于显示所需的所有值和信息。
      *
      * @param data
      */
@@ -292,7 +291,7 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
             return;
         }
 
-        // calculate how many digits are needed
+        // 计算需要多少位数
         setupDefaultFormatter(data.getYMin(), data.getYMax());
 
         for (IDataSet set : mData.getDataSets()) {
@@ -300,7 +299,7 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
                 set.setValueFormatter(mDefaultValueFormatter);
         }
 
-        // let the chart know there is new data
+        // 让图表知道有新的数据
         notifyDataSetChanged();
 
         if (mLogEnabled)
@@ -556,7 +555,8 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
      * Highlights any y-value at the given x-value in the given DataSet.
      * Provide -1 as the dataSetIndex to undo all highlighting.
      * This method will call the listener.
-     * @param x The x-value to highlight
+     *
+     * @param x            The x-value to highlight
      * @param dataSetIndex The dataset index to search in
      */
     public void highlightValue(float x, int dataSetIndex) {
@@ -567,8 +567,9 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
      * Highlights the value at the given x-value and y-value in the given DataSet.
      * Provide -1 as the dataSetIndex to undo all highlighting.
      * This method will call the listener.
-     * @param x The x-value to highlight
-     * @param y The y-value to highlight. Supply `NaN` for "any"
+     *
+     * @param x            The x-value to highlight
+     * @param y            The y-value to highlight. Supply `NaN` for "any"
      * @param dataSetIndex The dataset index to search in
      */
     public void highlightValue(float x, float y, int dataSetIndex) {
@@ -578,7 +579,8 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
     /**
      * Highlights any y-value at the given x-value in the given DataSet.
      * Provide -1 as the dataSetIndex to undo all highlighting.
-     * @param x The x-value to highlight
+     *
+     * @param x            The x-value to highlight
      * @param dataSetIndex The dataset index to search in
      * @param callListener Should the listener be called for this change
      */
@@ -589,8 +591,9 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
     /**
      * Highlights any y-value at the given x-value in the given DataSet.
      * Provide -1 as the dataSetIndex to undo all highlighting.
-     * @param x The x-value to highlight
-     * @param y The y-value to highlight. Supply `NaN` for "any"
+     *
+     * @param x            The x-value to highlight
+     * @param y            The y-value to highlight. Supply `NaN` for "any"
      * @param dataSetIndex The dataset index to search in
      * @param callListener Should the listener be called for this change
      */
@@ -986,7 +989,7 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
     }
 
     /**
-     * set a selection listener for the chart
+     * 为图表设置选择监听器
      *
      * @param l
      */

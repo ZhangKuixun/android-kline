@@ -355,7 +355,7 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
             lineDataSetMa.setVisible(false);
             lineDataSetMa.setHighlightEnabled(false);
         }
-        lineDataSetMa.setAxisDependency(YAxis.AxisDependency.LEFT);
+        lineDataSetMa.setAxisDependency(YAxis.AxisDependency.LEFT);//使得 DataSet 对应指定轴，进行绘制。
         lineDataSetMa.setLineWidth(1f);
         lineDataSetMa.setCircleRadius(1f);
 

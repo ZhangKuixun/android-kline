@@ -769,10 +769,8 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
     }
 
     /**
-     * Limits the maximum and minimum x range that can be visible by pinching and zooming. e.g. minRange=10, maxRange=100 the
-     * smallest range to be displayed at once is 10, and no more than a range of 100 values can be viewed at once without
-     * scrolling
-     * 设置可见x范围
+     * 设定可以通过捏和缩放可见的最大和最小X范围。
+     * 例如：minRange=10, maxRange=100，显示的最小范围为10，不滚动即可一次查看不超过100个值的范围。
      *
      * @param minXRange
      * @param maxXRange
@@ -821,8 +819,7 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
 
 
     /**
-     * Moves the left side of the current viewport to the specified x-position.
-     * This also refreshes the chart by calling invalidate().
+     * 将当前视口的左侧移动到指定的X位置。这也通过调用 invalidate() 刷新图表。
      *
      * @param xValue
      */
