@@ -342,8 +342,10 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
         LineDataSet lineDataSetMa = new LineDataSet(lineEntries, "ma" + type);
         lineDataSetMa.setDrawValues(false);
         if (type == NORMAL_LINE) {
+            lineDataSetMa.setDrawFilled(true);
             lineDataSetMa.setColor(getResources().getColor(R.color.normal_line_color));
-            lineDataSetMa.setCircleColor(ContextCompat.getColor(mContext, R.color.normal_line_color));
+//            lineDataSetMa.setCircleColor(ContextCompat.getColor(mContext, R.color.normal_line_color));
+            lineDataSetMa.setCircleColor(mTransparentColor);
         } else if (type == NORMAL_LINE_5DAY) {
             lineDataSetMa.setColor(getResources().getColor(R.color.normal_line_color));
             lineDataSetMa.setCircleColor(mTransparentColor);
