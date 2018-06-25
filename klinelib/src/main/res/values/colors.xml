@@ -34,7 +34,6 @@
     <color name="white">#fff</color>
 
     <color name="darkBlueGrey">#122642</color>
-    <color name="brightBlue10">#0066ff</color>
     <color name="dodgerBlue">#33a7fd</color>
     <color name="orangeyYellow">#ffb620</color>
     <color name="paleGreyTwo">#f0f0f1</color><!--rgb 240 240 241-->
@@ -61,4 +60,7 @@
     <color name="buy_color_light">#4718b894</color>
     <color name="sell_color">#e84f49</color>
     <color name="sell_color_light">#47e84f49</color>
+    <color name="brightBlue10">#0066ff</color>
+    <color name="paleGrey">#f7f8fa</color>
+    <color name="coolGrey">#909499</color>
 </resources>

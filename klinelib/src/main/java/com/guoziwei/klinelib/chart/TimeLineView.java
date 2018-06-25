@@ -125,10 +125,11 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
         //x轴
         XAxis xAxisPrice = mChartPrice.getXAxis();
         xAxisPrice.setDrawLabels(true);//设置为true，则绘制轴的标签
-        xAxisPrice.setDrawAxisLine(false);//设置为true，则绘制该行旁边的轴线
+//        xAxisPrice.setDrawAxisLine(false);//设置为true，则绘制该行旁边的轴线
         xAxisPrice.setDrawGridLines(false);//设置为true，则绘制网格线。
         xAxisPrice.setAvoidFirstLastClipping(true);//如果设置为true，绘制时会避免“剪掉”在x轴上的图表或屏幕边缘的第一个和最后一个坐标轴标签项。
-        xAxisPrice.setLabelCount(3, true);
+        xAxisPrice.setLabelCount(7, true);
+        xAxisPrice.setTextColor(getResources().getColor(R.color.coolGrey));
         xAxisPrice.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxisPrice.setValueFormatter(new IAxisValueFormatter() {
             @Override
@@ -358,7 +359,7 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
      * 对齐两张图表
      */
     private void setOffset() {
-        mChartPrice.setViewPortOffsets(0, 0, 0, 0);
+        mChartPrice.setViewPortOffsets(0, 0, 0, 20);
         mChartVolume.setViewPortOffsets(0, 0, 0, 0);
 //        int chartHeight = getResources().getDimensionPixelSize(R.dimen.bottom_chart_height);
 //        mChartPrice.setViewPortOffsets(0, 0, 0, chartHeight);

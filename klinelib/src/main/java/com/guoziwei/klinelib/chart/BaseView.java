@@ -74,6 +74,7 @@ class BaseView extends LinearLayout {
         axisLeftVolume.setDrawGridLines(false);
         axisLeftVolume.setDrawAxisLine(false);
         axisLeftVolume.setSpaceBottom(0f);
+        axisLeftVolume.setSpaceTop(0f);
 
         //右边y
         YAxis axisRightVolume = chart.getAxisRight();

@@ -6,8 +6,9 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/silver"
-        android:layout_weight="3">
+        android:layout_marginBottom="@dimen/dp_16"
+        android:layout_weight="3"
+        android:background="@color/white">
 
         <com.guoziwei.klinelib.chart.AppLineChart
             android:id="@+id/price_chart"
@@ -20,6 +21,11 @@
             android:layout_height="wrap_content"
             android:visibility="gone" />
     </FrameLayout>
+
+    <!--<View-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:background="@color/paleGrey"-->
+    <!--android:layout_height="@dimen/dp_16" />-->
 
     <com.guoziwei.klinelib.chart.AppCombinedChart
         android:id="@+id/vol_chart"
