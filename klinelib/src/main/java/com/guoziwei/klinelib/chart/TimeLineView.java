@@ -25,6 +25,7 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.Transformer;
+import com.github.mikephil.charting.utils.Utils;
 import com.guoziwei.klinelib.R;
 import com.guoziwei.klinelib.model.HisData;
 import com.guoziwei.klinelib.util.DataUtils;
@@ -108,9 +109,10 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
         mChartPrice.setBorderColor(getResources().getColor(R.color.silver));
         mChartPrice.setBorderWidth(1);//设置 chart 边界线的宽度，单位 dp。
         mChartPrice.getDescription().setEnabled(false);//设置图表的描述文字，会显示在图表的右下角。
-//        mChartPrice.setAutoScaleMinMaxEnabled(true);//标志，指示自动缩放在y轴已启用。
+        mChartPrice.setAutoScaleMinMaxEnabled(false);//标志，指示自动缩放在y轴已启用。
         mChartPrice.setDragDecelerationEnabled(false);//如果设置为true，手指滑动抛掷图表后继续减速滚动。
 
+        //marker
         LineChartXMarkerView mvx = new LineChartXMarkerView(mContext, mData);
         mvx.setChartView(mChartPrice);
         mChartPrice.setXMarker(mvx);
@@ -119,7 +121,6 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
         mChartPrice.setMarker(mv);
         Legend lineChartLegend = mChartPrice.getLegend();
         lineChartLegend.setEnabled(false);
-
 
         //x轴
         XAxis xAxisPrice = mChartPrice.getXAxis();
@@ -146,12 +147,14 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
         });
 
         //左边y
-        YAxis yAxisLeft = mChartPrice.getAxisLeft();
-        yAxisLeft.setDrawLabels(false);
+        YAxis yAxis = mChartPrice.getAxisLeft();
+        yAxis.setDrawLabels(false);
+        yAxis.setDrawGridLines(false);
 
         //右边y
         YAxis yAxisRight = mChartPrice.getAxisRight();
         yAxisRight.setDrawLabels(false);
+        yAxisRight.setDrawGridLines(false);
     }
 
 
@@ -355,29 +358,31 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
      * 对齐两张图表
      */
     private void setOffset() {
-        int chartHeight = getResources().getDimensionPixelSize(R.dimen.bottom_chart_height);
         mChartPrice.setViewPortOffsets(0, 0, 0, 0);
-        mChartVolume.setViewPortOffsets(0, 0, 0, DisplayUtils.dip2px(mContext, 20));
-        /*float lineLeft = mChartPrice.getViewPortHandler().offsetLeft();
-        float barLeft = mChartVolume.getViewPortHandler().offsetLeft();
-        float lineRight = mChartPrice.getViewPortHandler().offsetRight();
-        float barRight = mChartVolume.getViewPortHandler().offsetRight();
-        float offsetLeft, offsetRight;
-        if (barLeft < lineLeft) {
-            offsetLeft = Utils.convertPixelsToDp(lineLeft - barLeft);
-            mChartVolume.setExtraLeftOffset(offsetLeft);
-        } else {
-            offsetLeft = Utils.convertPixelsToDp(barLeft - lineLeft);
-            mChartPrice.setExtraLeftOffset(offsetLeft);
-        }
-        if (barRight < lineRight) {
-            offsetRight = Utils.convertPixelsToDp(lineRight);
-            mChartVolume.setExtraRightOffset(offsetRight);
-        } else {
-            offsetRight = Utils.convertPixelsToDp(barRight);
-            mChartPrice.setExtraRightOffset(offsetRight);
-        }*/
+        mChartVolume.setViewPortOffsets(0, 0, 0, 0);
+//        int chartHeight = getResources().getDimensionPixelSize(R.dimen.bottom_chart_height);
+//        mChartPrice.setViewPortOffsets(0, 0, 0, chartHeight);
+//        mChartVolume.setViewPortOffsets(0, 0, 0, DisplayUtils.dip2px(mContext, 20));
 
+//        float lineLeft = mChartPrice.getViewPortHandler().offsetLeft();
+//        float barLeft = mChartVolume.getViewPortHandler().offsetLeft();
+//        float lineRight = mChartPrice.getViewPortHandler().offsetRight();
+//        float barRight = mChartVolume.getViewPortHandler().offsetRight();
+//        float offsetLeft, offsetRight;
+//        if (barLeft < lineLeft) {
+//            offsetLeft = Utils.convertPixelsToDp(lineLeft - barLeft);
+//            mChartVolume.setExtraLeftOffset(offsetLeft);
+//        } else {
+//            offsetLeft = Utils.convertPixelsToDp(barLeft - lineLeft);
+//            mChartPrice.setExtraLeftOffset(offsetLeft);
+//        }
+//        if (barRight < lineRight) {
+//            offsetRight = Utils.convertPixelsToDp(lineRight);
+//            mChartVolume.setExtraRightOffset(offsetRight);
+//        } else {
+//            offsetRight = Utils.convertPixelsToDp(barRight);
+//            mChartPrice.setExtraRightOffset(offsetRight);
+//        }
     }
 
 
