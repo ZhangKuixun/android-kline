@@ -25,6 +25,7 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.Transformer;
+import com.github.mikephil.charting.utils.Utils;
 import com.guoziwei.klinelib.R;
 import com.guoziwei.klinelib.model.HisData;
 import com.guoziwei.klinelib.util.DataUtils;
@@ -32,6 +33,7 @@ import com.guoziwei.klinelib.util.DateUtils;
 import com.guoziwei.klinelib.util.DisplayUtils;
 import com.guoziwei.klinelib.util.DoubleUtil;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -55,7 +57,7 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
      */
     public static final int INVISIABLE_LINE = 6;
 
-    protected AppCombinedChart mChartPrice;//内容
+    protected AppLineChart mChartPrice;//内容
     protected AppCombinedChart mChartVolume;//底部
 
     protected ChartInfoView mChartInfoView;//选中后的提示信息
@@ -87,7 +89,7 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
     public TimeLineView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mContext = context;
-        LayoutInflater.from(context).inflate(R.layout.view_timeline, this);
+        LayoutInflater.from(context).inflate(R.layout.view_timeline_, this);
         mChartPrice = findViewById(R.id.price_chart);
         mChartVolume = findViewById(R.id.vol_chart);
         mChartInfoView = findViewById(R.id.line_info);
@@ -103,79 +105,57 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
 
     protected void initChartPrice() {
         mChartPrice.setScaleEnabled(true);//启用/禁用缩放图表上的两个轴。
-        mChartPrice.setDrawBorders(false);//启用/禁用绘制图表边框（chart周围的线）
+        mChartPrice.setDrawBorders(true);//启用/禁用绘制图表边框（chart周围的线）
+        mChartPrice.setBorderColor(getResources().getColor(R.color.silver));
         mChartPrice.setBorderWidth(1);//设置 chart 边界线的宽度，单位 dp。
-        mChartPrice.setDragEnabled(true);//启用/禁用拖动（平移）图表。
-        mChartPrice.setScaleYEnabled(false);// 启用/禁用缩放在y轴。
         mChartPrice.getDescription().setEnabled(false);//设置图表的描述文字，会显示在图表的右下角。
-        mChartPrice.setAutoScaleMinMaxEnabled(true);//标志，指示自动缩放在y轴已启用。 如果启用Y轴自动调整到最小和当前的X轴的范围，只要视口变化的最大y值。 这是图表显示的财务数据特别有趣
+        mChartPrice.setAutoScaleMinMaxEnabled(false);//标志，指示自动缩放在y轴已启用。
         mChartPrice.setDragDecelerationEnabled(false);//如果设置为true，手指滑动抛掷图表后继续减速滚动。
+
+        //marker
         LineChartXMarkerView mvx = new LineChartXMarkerView(mContext, mData);
         mvx.setChartView(mChartPrice);
         mChartPrice.setXMarker(mvx);
+        LineChartYMarkerView mv = new LineChartYMarkerView(mContext, 2);
+        mv.setChartView(mChartPrice);
+        mChartPrice.setMarker(mv);
         Legend lineChartLegend = mChartPrice.getLegend();
         lineChartLegend.setEnabled(false);
 
+        //x轴
         XAxis xAxisPrice = mChartPrice.getXAxis();
-        xAxisPrice.setDrawLabels(false);//设置为true，则绘制轴的标签
-        xAxisPrice.setDrawAxisLine(false);//设置为true，则绘制该行旁边的轴线
+        xAxisPrice.setDrawLabels(true);//设置为true，则绘制轴的标签
+//        xAxisPrice.setDrawAxisLine(false);//设置为true，则绘制该行旁边的轴线
         xAxisPrice.setDrawGridLines(false);//设置为true，则绘制网格线。
-        xAxisPrice.setAxisMinimum(-0.5f);//为该轴设置自定义最小值。
-
-        //设置左边Y轴价格
-        YAxis axisLeftPrice = mChartPrice.getAxisLeft();//获得左侧侧坐标轴
-        axisLeftPrice.setLabelCount(5, true);//左侧侧坐标轴有5个刻度
-        axisLeftPrice.setDrawLabels(true);
-        axisLeftPrice.setDrawGridLines(false);
-        axisLeftPrice.setDrawAxisLine(false);
-        axisLeftPrice.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);// 设置X轴的位置
-        axisLeftPrice.setTextColor(mAxisColor);
-        axisLeftPrice.setValueFormatter(new IAxisValueFormatter() {
+        xAxisPrice.setAvoidFirstLastClipping(true);//如果设置为true，绘制时会避免“剪掉”在x轴上的图表或屏幕边缘的第一个和最后一个坐标轴标签项。
+        xAxisPrice.setLabelCount(7, true);
+        xAxisPrice.setTextColor(getResources().getColor(R.color.coolGrey));
+        xAxisPrice.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxisPrice.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return DoubleUtil.getStringByDigits(value, mDigits);
-            }
-        });
-
-        //设置右边Y轴价格
-        YAxis axisRightPrice = mChartPrice.getAxisRight();
-        axisRightPrice.setLabelCount(5, true);
-        axisRightPrice.setDrawLabels(true);
-        axisRightPrice.setDrawGridLines(false);
-        axisRightPrice.setDrawAxisLine(false);
-        axisRightPrice.setTextColor(mAxisColor);
-        axisRightPrice.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
-        axisRightPrice.setValueFormatter(new IAxisValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                double rate = (value - mLastClose) / mLastClose * 100;
-                if (Double.isNaN(rate) || Double.isInfinite(rate)) {
+                if (mData.isEmpty())
                     return "";
-                }
-                String s = String.format(Locale.getDefault(), "%.2f%%", rate);
-                if (TextUtils.equals("-0.00%", s)) {
-                    return "0.00%";
-                }
-                return s;
+
+                if (value < 0)
+                    value = 0;
+
+                if (value < mData.size())
+                    return DateUtils.formatDate(mData.get((int) value).getDate(), mDateFormat);
+
+                return "";
             }
         });
 
-        //设置标签左边Y渲染器
-        int[] colorArray = {mDecreasingColor, mDecreasingColor, mAxisColor, mIncreasingColor, mIncreasingColor};
-        Transformer leftYTransformer = mChartPrice.getRendererLeftYAxis().getTransformer();
-        ColorContentYAxisRenderer leftColorContentYAxisRenderer = new ColorContentYAxisRenderer(mChartPrice.getViewPortHandler(), mChartPrice.getAxisLeft(), leftYTransformer);
-        leftColorContentYAxisRenderer.setLabelColor(colorArray);
-        leftColorContentYAxisRenderer.setLabelInContent(true);//在内容中设置标签
-        leftColorContentYAxisRenderer.setUseDefaultLabelXOffset(false);
-        mChartPrice.setRendererLeftYAxis(leftColorContentYAxisRenderer);
+        //左边y
+        YAxis yAxis = mChartPrice.getAxisLeft();
+        yAxis.setDrawLabels(false);
+        yAxis.setDrawGridLines(false);
 
-        //设置标签右边Y渲染器
-        Transformer rightYTransformer = mChartPrice.getRendererRightYAxis().getTransformer();
-        ColorContentYAxisRenderer rightColorContentYAxisRenderer = new ColorContentYAxisRenderer(mChartPrice.getViewPortHandler(), mChartPrice.getAxisRight(), rightYTransformer);
-        rightColorContentYAxisRenderer.setLabelInContent(true);
-        rightColorContentYAxisRenderer.setUseDefaultLabelXOffset(false);
-        rightColorContentYAxisRenderer.setLabelColor(colorArray);
-        mChartPrice.setRendererRightYAxis(rightColorContentYAxisRenderer);
+        //右边y
+        YAxis yAxisRight = mChartPrice.getAxisRight();
+        yAxisRight.setDrawLabels(false);
+        yAxisRight.setDrawGridLines(false);
     }
 
 
@@ -219,9 +199,9 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
         sets.add(setLine(INVISIABLE_LINE, paddingEntries));
         LineData lineData = new LineData(sets);
 
-        CombinedData combinedData = new CombinedData();
-        combinedData.setData(lineData);
-        mChartPrice.setData(combinedData);
+//        CombinedData combinedData = new CombinedData();
+//        combinedData.setData(lineData);
+        mChartPrice.setData(lineData);
 
         mChartPrice.setVisibleXRange(MAX_COUNT, MIN_COUNT);
 
@@ -230,7 +210,7 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
         moveToLast(mChartPrice);
         initChartVolumeData();
 
-        mChartPrice.getXAxis().setAxisMaximum(combinedData.getXMax() + 0.5f);//为该轴设置自定义最大值。
+        mChartPrice.getXAxis().setAxisMaximum(lineData.getXMax() + 0.5f);//为该轴设置自定义最大值。
         mChartVolume.getXAxis().setAxisMaximum(mChartVolume.getData().getXMax() + 0.5f);//为该轴设置自定义最大值。
 
         mChartPrice.zoom(MAX_COUNT * 1f / INIT_COUNT, 0, 0, 0);
@@ -239,7 +219,218 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
         setDescription(mChartVolume, "成交量 " + getLastData().getVol());//按给定比例因子放大或缩小。X和Y是变焦中心的坐标（以像素为单位）。
     }
 
-    public void initDatas(List<HisData>... hisDatas) {
+
+    private BarDataSet setBar(ArrayList<BarEntry> barEntries, int type) {
+        BarDataSet barDataSet = new BarDataSet(barEntries, "vol");
+        barDataSet.setHighLightAlpha(120);
+        barDataSet.setHighLightColor(getResources().getColor(R.color.darkBlueGrey));
+        barDataSet.setDrawValues(false);//启用/禁用 绘制所有 DataSets 数据对象包含的数据的值文本。
+        barDataSet.setVisible(type != INVISIABLE_LINE);
+        barDataSet.setHighlightEnabled(type != INVISIABLE_LINE);//设置为true，允许通过点击高亮突出 ChartData 对象和其 DataSets
+        barDataSet.setColors(getResources().getColor(R.color.increasing_color), getResources().getColor(R.color.decreasing_color));//设置每条主子的颜色
+        return barDataSet;
+    }
+
+
+    @android.support.annotation.NonNull
+    private LineDataSet setLine(int type, ArrayList<Entry> lineEntries) {
+        LineDataSet lineDataSetMa = new LineDataSet(lineEntries, "ma" + type);
+        lineDataSetMa.setDrawValues(false);
+        if (type == NORMAL_LINE) {
+            lineDataSetMa.setDrawFilled(true);
+            lineDataSetMa.setFillAlpha(25);
+            lineDataSetMa.setFillColor(getResources().getColor(R.color.brightBlue10));
+            lineDataSetMa.setColor(getResources().getColor(R.color.dodgerBlue));
+            lineDataSetMa.setCircleColor(mTransparentColor);
+            lineDataSetMa.setHighLightColor(getResources().getColor(R.color.darkBlueGrey));
+        } else if (type == NORMAL_LINE_5DAY) {
+            lineDataSetMa.setColor(getResources().getColor(R.color.normal_line_color));
+            lineDataSetMa.setCircleColor(mTransparentColor);
+        } else if (type == AVE_LINE) {
+            lineDataSetMa.setColor(getResources().getColor(R.color.orangeyYellow));
+            lineDataSetMa.setCircleColor(mTransparentColor);
+            lineDataSetMa.setHighlightEnabled(false);
+        } else {
+            lineDataSetMa.setVisible(false);
+            lineDataSetMa.setHighlightEnabled(false);
+        }
+        lineDataSetMa.setAxisDependency(YAxis.AxisDependency.LEFT);//使得 DataSet 对应指定轴，进行绘制。
+        lineDataSetMa.setLineWidth(1f);
+        lineDataSetMa.setCircleRadius(1f);
+
+        lineDataSetMa.setDrawCircles(false);
+        lineDataSetMa.setDrawCircleHole(false);
+
+        return lineDataSetMa;
+    }
+
+
+    private void initChartVolumeData() {
+        ArrayList<BarEntry> barEntries = new ArrayList<>();
+        ArrayList<BarEntry> paddingEntries = new ArrayList<>();
+        for (int i = 0; i < mData.size(); i++) {
+            HisData t = mData.get(i);
+            barEntries.add(new BarEntry(i, (float) t.getVol(), t));
+        }
+        int maxCount = MAX_COUNT;
+        if (!mData.isEmpty() && mData.size() < maxCount) {
+            for (int i = mData.size(); i < maxCount; i++) {
+                paddingEntries.add(new BarEntry(i, 0));
+            }
+        }
+
+        BarData barData = new BarData(setBar(barEntries, NORMAL_LINE), setBar(paddingEntries, INVISIABLE_LINE));
+        barData.setBarWidth(0.75f);
+        CombinedData combinedData = new CombinedData();
+        combinedData.setData(barData);
+        mChartVolume.setData(combinedData);
+
+        mChartVolume.setVisibleXRange(MAX_COUNT, MIN_COUNT);
+
+        mChartVolume.notifyDataSetChanged();
+        mChartVolume.moveViewToX(combinedData.getEntryCount());//将当前视口的左侧移动到指定的X位置。
+
+    }
+
+
+    /**
+     * according to the price to refresh the last data of the chart
+     */
+    public void refreshData(float price) {
+        if (price <= 0 || price == mLastPrice) {
+            return;
+        }
+        mLastPrice = price;
+        LineData lineData = mChartPrice.getData();
+//        if (data == null)
+//            return;
+//        LineData lineData = data.getLineData();
+        if (lineData != null) {
+            ILineDataSet set = lineData.getDataSetByIndex(0);
+            if (set.removeLast()) {
+                set.addEntry(new Entry(set.getEntryCount(), price));
+            }
+        }
+
+        mChartPrice.notifyDataSetChanged();
+        mChartPrice.invalidate();
+    }
+
+
+    public void addData(HisData hisData) {
+        hisData = DataUtils.calculateHisData(hisData, mData);
+//        CombinedData combinedData = mChartPrice.getData();
+//        LineData priceData = combinedData.getLineData();
+        LineData priceData = mChartPrice.getData();
+        ILineDataSet priceSet = priceData.getDataSetByIndex(0);
+        ILineDataSet aveSet = priceData.getDataSetByIndex(1);
+        IBarDataSet volSet = mChartVolume.getData().getBarData().getDataSetByIndex(0);
+        if (mData.contains(hisData)) {
+            int index = mData.indexOf(hisData);
+            priceSet.removeEntry(index);
+            aveSet.removeEntry(index);
+            volSet.removeEntry(index);
+            mData.remove(index);
+        }
+
+        mData.add(hisData);
+        mChartPrice.setRealCount(mData.size());
+
+        priceSet.addEntry(new Entry(priceSet.getEntryCount(), (float) hisData.getClose()));
+        aveSet.addEntry(new Entry(aveSet.getEntryCount(), (float) hisData.getAvePrice()));
+        volSet.addEntry(new BarEntry(volSet.getEntryCount(), hisData.getVol(), hisData));
+
+        mChartPrice.setVisibleXRange(MAX_COUNT, MIN_COUNT);
+        mChartVolume.setVisibleXRange(MAX_COUNT, MIN_COUNT);
+
+        mChartPrice.getXAxis().setAxisMaximum(priceData.getXMax() + 1.5f);
+        mChartVolume.getXAxis().setAxisMaximum(mChartVolume.getData().getXMax() + 1.5f);
+
+        mChartPrice.notifyDataSetChanged();
+        mChartPrice.invalidate();
+        mChartVolume.notifyDataSetChanged();
+        mChartVolume.invalidate();
+
+        setDescription(mChartVolume, "成交量 " + hisData.getVol());
+    }
+
+
+    /**
+     * 对齐两张图表
+     */
+    private void setOffset() {
+        mChartPrice.setViewPortOffsets(0, 0, 0, 20);
+        mChartVolume.setViewPortOffsets(0, 0, 0, 0);
+//        int chartHeight = getResources().getDimensionPixelSize(R.dimen.bottom_chart_height);
+//        mChartPrice.setViewPortOffsets(0, 0, 0, chartHeight);
+//        mChartVolume.setViewPortOffsets(0, 0, 0, DisplayUtils.dip2px(mContext, 20));
+
+//        float lineLeft = mChartPrice.getViewPortHandler().offsetLeft();
+//        float barLeft = mChartVolume.getViewPortHandler().offsetLeft();
+//        float lineRight = mChartPrice.getViewPortHandler().offsetRight();
+//        float barRight = mChartVolume.getViewPortHandler().offsetRight();
+//        float offsetLeft, offsetRight;
+//        if (barLeft < lineLeft) {
+//            offsetLeft = Utils.convertPixelsToDp(lineLeft - barLeft);
+//            mChartVolume.setExtraLeftOffset(offsetLeft);
+//        } else {
+//            offsetLeft = Utils.convertPixelsToDp(barLeft - lineLeft);
+//            mChartPrice.setExtraLeftOffset(offsetLeft);
+//        }
+//        if (barRight < lineRight) {
+//            offsetRight = Utils.convertPixelsToDp(lineRight);
+//            mChartVolume.setExtraRightOffset(offsetRight);
+//        } else {
+//            offsetRight = Utils.convertPixelsToDp(barRight);
+//            mChartPrice.setExtraRightOffset(offsetRight);
+//        }
+    }
+
+
+    /**
+     * add limit line to chart
+     */
+    public void setLimitLine(double lastClose) {
+        LimitLine limitLine = new LimitLine((float) lastClose);
+        limitLine.enableDashedLine(5, 10, 0);
+        limitLine.setLineColor(getResources().getColor(R.color.limit_color));
+        mChartPrice.getAxisLeft().addLimitLine(limitLine);
+    }
+
+    public void setLimitLine() {
+        setLimitLine(mLastClose);
+    }
+
+    public void setLastClose(double lastClose) {
+        mLastClose = lastClose;
+//        mChartPrice.setYCenter((float) lastClose);
+        mChartPrice.setOnChartValueSelectedListener(new InfoViewListener(mContext, mLastClose, mData, mChartInfoView, mChartVolume));
+        mChartVolume.setOnChartValueSelectedListener(new InfoViewListener(mContext, mLastClose, mData, mChartInfoView, mChartPrice));
+    }
+
+
+    public HisData getLastData() {
+        if (mData != null && !mData.isEmpty()) {
+            return mData.get(mData.size() - 1);
+        }
+        return null;
+    }
+
+
+    @Override
+    public void onAxisChange(BarLineChartBase chart) {
+        float lowestVisibleX = chart.getLowestVisibleX();
+        if (lowestVisibleX <= chart.getXAxis().getAxisMinimum())
+            return;
+        int maxX = (int) chart.getHighestVisibleX();
+        int x = Math.min(maxX, mData.size() - 1);
+        HisData hisData = mData.get(x < 0 ? 0 : x);
+        setDescription(mChartVolume, "成交量 " + hisData.getVol());
+    }
+
+    //5天
+    @SafeVarargs
+    public final void initDatas(List<HisData>... hisDatas) {
         // 设置标签数量，并让标签居中显示
         XAxis xAxis = mChartVolume.getXAxis();
         xAxis.setLabelCount(hisDatas.length, false);
@@ -297,9 +488,9 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
 
         LineData lineData = new LineData(sets);
 
-        CombinedData combinedData = new CombinedData();
-        combinedData.setData(lineData);
-        mChartPrice.setData(combinedData);
+//        CombinedData combinedData = new CombinedData();
+//        combinedData.setData(lineData);
+        mChartPrice.setData(lineData);
         mChartPrice.setVisibleXRange(MAX_COUNT, MIN_COUNT);
         mChartPrice.notifyDataSetChanged();
 //        mChartPrice.moveViewToX(combinedData.getEntryCount());
@@ -315,7 +506,7 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
         mChartVolume.notifyDataSetChanged();
         mChartVolume.moveViewToX(combinedData2.getEntryCount());
 
-        mChartPrice.getXAxis().setAxisMaximum(combinedData.getXMax() + 0.5f);
+        mChartPrice.getXAxis().setAxisMaximum(lineData.getXMax() + 0.5f);
         mChartVolume.getXAxis().setAxisMaximum(mChartVolume.getData().getXMax() + 0.5f);
 
         mChartPrice.zoom(MAX_COUNT * 1f / INIT_COUNT, 0, 0, 0);
@@ -324,205 +515,4 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
         setDescription(mChartVolume, "成交量 " + getLastData().getVol());
     }
 
-
-    private BarDataSet setBar(ArrayList<BarEntry> barEntries, int type) {
-        BarDataSet barDataSet = new BarDataSet(barEntries, "vol");
-        barDataSet.setHighLightAlpha(120);
-        barDataSet.setHighLightColor(getResources().getColor(R.color.highlight_color));
-        barDataSet.setDrawValues(false);//启用/禁用 绘制所有 DataSets 数据对象包含的数据的值文本。
-        barDataSet.setVisible(type != INVISIABLE_LINE);
-        barDataSet.setHighlightEnabled(type != INVISIABLE_LINE);//设置为true，允许通过点击高亮突出 ChartData 对象和其 DataSets
-        barDataSet.setColors(getResources().getColor(R.color.increasing_color), getResources().getColor(R.color.decreasing_color));//设置每条主子的颜色
-        return barDataSet;
-    }
-
-
-    @android.support.annotation.NonNull
-    private LineDataSet setLine(int type, ArrayList<Entry> lineEntries) {
-        LineDataSet lineDataSetMa = new LineDataSet(lineEntries, "ma" + type);
-        lineDataSetMa.setDrawValues(false);
-        if (type == NORMAL_LINE) {
-            lineDataSetMa.setColor(getResources().getColor(R.color.normal_line_color));
-            lineDataSetMa.setCircleColor(ContextCompat.getColor(mContext, R.color.normal_line_color));
-        } else if (type == NORMAL_LINE_5DAY) {
-            lineDataSetMa.setColor(getResources().getColor(R.color.normal_line_color));
-            lineDataSetMa.setCircleColor(mTransparentColor);
-        } else if (type == AVE_LINE) {
-            lineDataSetMa.setColor(getResources().getColor(R.color.ave_color));
-            lineDataSetMa.setCircleColor(mTransparentColor);
-            lineDataSetMa.setHighlightEnabled(false);
-        } else {
-            lineDataSetMa.setVisible(false);
-            lineDataSetMa.setHighlightEnabled(false);
-        }
-        lineDataSetMa.setAxisDependency(YAxis.AxisDependency.LEFT);//使得 DataSet 对应指定轴，进行绘制。
-        lineDataSetMa.setLineWidth(1f);
-        lineDataSetMa.setCircleRadius(1f);
-
-        lineDataSetMa.setDrawCircles(false);
-        lineDataSetMa.setDrawCircleHole(false);
-
-        return lineDataSetMa;
-    }
-
-
-    private void initChartVolumeData() {
-        ArrayList<BarEntry> barEntries = new ArrayList<>();
-        ArrayList<BarEntry> paddingEntries = new ArrayList<>();
-        for (int i = 0; i < mData.size(); i++) {
-            HisData t = mData.get(i);
-            barEntries.add(new BarEntry(i, (float) t.getVol(), t));
-        }
-        int maxCount = MAX_COUNT;
-        if (!mData.isEmpty() && mData.size() < maxCount) {
-            for (int i = mData.size(); i < maxCount; i++) {
-                paddingEntries.add(new BarEntry(i, 0));
-            }
-        }
-
-        BarData barData = new BarData(setBar(barEntries, NORMAL_LINE), setBar(paddingEntries, INVISIABLE_LINE));
-        barData.setBarWidth(0.75f);
-        CombinedData combinedData = new CombinedData();
-        combinedData.setData(barData);
-        mChartVolume.setData(combinedData);
-
-        mChartVolume.setVisibleXRange(MAX_COUNT, MIN_COUNT);
-
-        mChartVolume.notifyDataSetChanged();
-        mChartVolume.moveViewToX(combinedData.getEntryCount());//将当前视口的左侧移动到指定的X位置。
-
-    }
-
-
-    /**
-     * according to the price to refresh the last data of the chart
-     */
-    public void refreshData(float price) {
-        if (price <= 0 || price == mLastPrice) {
-            return;
-        }
-        mLastPrice = price;
-        CombinedData data = mChartPrice.getData();
-        if (data == null)
-            return;
-        LineData lineData = data.getLineData();
-        if (lineData != null) {
-            ILineDataSet set = lineData.getDataSetByIndex(0);
-            if (set.removeLast()) {
-                set.addEntry(new Entry(set.getEntryCount(), price));
-            }
-        }
-
-        mChartPrice.notifyDataSetChanged();
-        mChartPrice.invalidate();
-    }
-
-
-    public void addData(HisData hisData) {
-        hisData = DataUtils.calculateHisData(hisData, mData);
-        CombinedData combinedData = mChartPrice.getData();
-        LineData priceData = combinedData.getLineData();
-        ILineDataSet priceSet = priceData.getDataSetByIndex(0);
-        ILineDataSet aveSet = priceData.getDataSetByIndex(1);
-        IBarDataSet volSet = mChartVolume.getData().getBarData().getDataSetByIndex(0);
-        if (mData.contains(hisData)) {
-            int index = mData.indexOf(hisData);
-            priceSet.removeEntry(index);
-            aveSet.removeEntry(index);
-            volSet.removeEntry(index);
-            mData.remove(index);
-        }
-
-        mData.add(hisData);
-        mChartPrice.setRealCount(mData.size());
-
-        priceSet.addEntry(new Entry(priceSet.getEntryCount(), (float) hisData.getClose()));
-        aveSet.addEntry(new Entry(aveSet.getEntryCount(), (float) hisData.getAvePrice()));
-        volSet.addEntry(new BarEntry(volSet.getEntryCount(), hisData.getVol(), hisData));
-
-        mChartPrice.setVisibleXRange(MAX_COUNT, MIN_COUNT);
-        mChartVolume.setVisibleXRange(MAX_COUNT, MIN_COUNT);
-
-        mChartPrice.getXAxis().setAxisMaximum(combinedData.getXMax() + 1.5f);
-        mChartVolume.getXAxis().setAxisMaximum(mChartVolume.getData().getXMax() + 1.5f);
-
-        mChartPrice.notifyDataSetChanged();
-        mChartPrice.invalidate();
-        mChartVolume.notifyDataSetChanged();
-        mChartVolume.invalidate();
-
-        setDescription(mChartVolume, "成交量 " + hisData.getVol());
-    }
-
-
-    /**
-     * 对齐两张图表
-     */
-    private void setOffset() {
-        int chartHeight = getResources().getDimensionPixelSize(R.dimen.bottom_chart_height);
-        mChartPrice.setViewPortOffsets(0, 0, 0, chartHeight);
-        mChartVolume.setViewPortOffsets(0, 0, 0, DisplayUtils.dip2px(mContext, 20));
-        /*float lineLeft = mChartPrice.getViewPortHandler().offsetLeft();
-        float barLeft = mChartVolume.getViewPortHandler().offsetLeft();
-        float lineRight = mChartPrice.getViewPortHandler().offsetRight();
-        float barRight = mChartVolume.getViewPortHandler().offsetRight();
-        float offsetLeft, offsetRight;
-        if (barLeft < lineLeft) {
-            offsetLeft = Utils.convertPixelsToDp(lineLeft - barLeft);
-            mChartVolume.setExtraLeftOffset(offsetLeft);
-        } else {
-            offsetLeft = Utils.convertPixelsToDp(barLeft - lineLeft);
-            mChartPrice.setExtraLeftOffset(offsetLeft);
-        }
-        if (barRight < lineRight) {
-            offsetRight = Utils.convertPixelsToDp(lineRight);
-            mChartVolume.setExtraRightOffset(offsetRight);
-        } else {
-            offsetRight = Utils.convertPixelsToDp(barRight);
-            mChartPrice.setExtraRightOffset(offsetRight);
-        }*/
-
-    }
-
-
-    /**
-     * add limit line to chart
-     */
-    public void setLimitLine(double lastClose) {
-        LimitLine limitLine = new LimitLine((float) lastClose);
-        limitLine.enableDashedLine(5, 10, 0);
-        limitLine.setLineColor(getResources().getColor(R.color.limit_color));
-        mChartPrice.getAxisLeft().addLimitLine(limitLine);
-    }
-
-    public void setLimitLine() {
-        setLimitLine(mLastClose);
-    }
-
-    public void setLastClose(double lastClose) {
-        mLastClose = lastClose;
-        mChartPrice.setYCenter((float) lastClose);
-        mChartPrice.setOnChartValueSelectedListener(new InfoViewListener(mContext, mLastClose, mData, mChartInfoView, mChartVolume));
-        mChartVolume.setOnChartValueSelectedListener(new InfoViewListener(mContext, mLastClose, mData, mChartInfoView, mChartPrice));
-    }
-
-
-    public HisData getLastData() {
-        if (mData != null && !mData.isEmpty()) {
-            return mData.get(mData.size() - 1);
-        }
-        return null;
-    }
-
-
-    @Override
-    public void onAxisChange(BarLineChartBase chart) {
-        float lowestVisibleX = chart.getLowestVisibleX();
-        if (lowestVisibleX <= chart.getXAxis().getAxisMinimum())
-            return;
-        int maxX = (int) chart.getHighestVisibleX();
-        int x = Math.min(maxX, mData.size() - 1);
-        HisData hisData = mData.get(x < 0 ? 0 : x);
-        setDescription(mChartVolume, "成交量 " + hisData.getVol());
-    }
 }

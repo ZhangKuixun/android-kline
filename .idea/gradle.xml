@@ -8,8 +8,8 @@
         <option name="gradleHome" value="D:\android\Android Studio\gradle\gradle-4.1" />
         <option name="modules">
           <set>
+            <option value="$PROJECT_DIR$/../MPAndroidChartChinese/MPChartLib" />
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/MPChartLib" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/klinelib" />
           </set>

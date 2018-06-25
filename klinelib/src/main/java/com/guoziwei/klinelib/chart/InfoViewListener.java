@@ -22,11 +22,11 @@ import java.util.List;
 public class InfoViewListener implements OnChartValueSelectedListener {
 
     private List<HisData> mList;
-    private double mLastClose;
+    private double mLastClose;//昨日收盘价
     private ChartInfoView mInfoView;//选中后的提示信息
     private int mWidth;
     /**
-     * if otherChart not empty, highlight will disappear after 3 second
+     * 如果其他图表不为空，3秒后高亮将消失。
      */
     private Chart[] mOtherChart;
 

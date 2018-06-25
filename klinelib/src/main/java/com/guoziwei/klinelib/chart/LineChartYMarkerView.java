@@ -26,7 +26,7 @@ public class LineChartYMarkerView extends MarkerView {
     public LineChartYMarkerView(Context context, int digits) {
         super(context, R.layout.view_mp_real_price_marker);
         this.digits = digits;
-        tvContent = (TextView) findViewById(R.id.tvContent);
+        tvContent = findViewById(R.id.tvContent);
     }
 
     @Override

@@ -70,31 +70,26 @@ public class AppCombinedChart extends CombinedChart {
             Entry e = mData.getEntryForHighlight(mIndicesToHighlight[i]);
             int entryIndex = set.getEntryIndex(e);
 
-            // make sure entry not null
+            // 确保条目不为空
             if (e == null || entryIndex > set.getEntryCount() * mAnimator.getPhaseX())
                 continue;
 
             float[] pos = getMarkerPosition(highlight);
 
-            // check bounds
+            // 检查界限
             if (!mViewPortHandler.isInBounds(pos[0], pos[1]))
                 continue;
 
-            // callbacks to update the content
-            mMarker.refreshContent(e, highlight);
+            // 回调更新内容
             mXMarker.refreshContent(e, highlight);
+            mMarker.refreshContent(e, highlight);
 
-            // draw the marker
-//            if (mMarker instanceof LineChartYMarkerView) {
-            LineChartYMarkerView yMarker = (LineChartYMarkerView) mMarker;
+            // draw marker
             LineChartXMarkerView xMarker = (LineChartXMarkerView) mXMarker;
-            int width = yMarker.getMeasuredWidth();
-            mMarker.draw(canvas, getMeasuredWidth() - width * 1.05f, pos[1] - yMarker.getMeasuredHeight() / 2);
-
+            LineChartYMarkerView yMarker = (LineChartYMarkerView) mMarker;
             mXMarker.draw(canvas, pos[0] - (xMarker.getMeasuredWidth() / 2), getMeasuredHeight());
-//            } else {
-//                mMarker.draw(canvas, pos[0], pos[1]);
-//            }
+            mMarker.draw(canvas, 0, pos[1] - yMarker.getMeasuredHeight() / 2);
+//            mMarker.draw(canvas, getMeasuredWidth() - yMarker.getMeasuredWidth() * 1.05f, pos[1] - yMarker.getMeasuredHeight() / 2);
         }
     }
 
