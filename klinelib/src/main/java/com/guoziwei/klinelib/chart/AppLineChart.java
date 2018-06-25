@@ -72,18 +72,15 @@ public class AppLineChart extends LineChart {
             }
 
             // draw the marker
-//            if (mMarker instanceof LineChartYMarkerView) {
             LineChartYMarkerView yMarker = (LineChartYMarkerView) mMarker;
             LineChartXMarkerView xMarker = (LineChartXMarkerView) mXMarker;
-            int width = yMarker.getMeasuredWidth();
-            mMarker.draw(canvas, getMeasuredWidth() - width * 1.05f, pos[1] - yMarker.getMeasuredHeight() / 2);
+//            int width = yMarker.getMeasuredWidth();
+//            mMarker.draw(canvas, getMeasuredWidth() - width * 1.05f, pos[1] - yMarker.getMeasuredHeight() / 2);
+            mMarker.draw(canvas, 0, pos[1] - yMarker.getMeasuredHeight() / 2);
 
             if (mXMarker != null && set.isVerticalHighlightIndicatorEnabled()) {
                 mXMarker.draw(canvas, pos[0] - (xMarker.getMeasuredWidth() / 2), getMeasuredHeight());
             }
-//            } else {
-//                mMarker.draw(canvas, pos[0], pos[1]);
-//            }
         }
     }
 

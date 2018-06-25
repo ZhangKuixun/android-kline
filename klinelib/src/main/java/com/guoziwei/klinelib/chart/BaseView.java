@@ -57,78 +57,29 @@ class BaseView extends LinearLayout {
     //底部柱状图
     protected void initBottomChart(AppCombinedChart chart) {
         chart.setScaleEnabled(true);//启用/禁用缩放图表上的两个轴。
-        chart.setDrawBorders(false);//启用/禁用绘制图表边框（chart周围的线）
+        chart.setDrawBorders(true);//启用/禁用绘制图表边框（chart周围的线）
+        chart.setBorderColor(getResources().getColor(R.color.silver));
         chart.setBorderWidth(1);
-        chart.setDragEnabled(true);//启用/禁用拖动（平移）图表。
-        chart.setScaleYEnabled(false);// 启用/禁用缩放在y轴。
-        chart.setAutoScaleMinMaxEnabled(false);//标志，指示自动缩放在y轴已启用。如果启用Y轴自动调整到最小和当前的X轴的范围，只要视口变化的最大y值。 这是图表显示的财务数据特别有趣
-        chart.setDragDecelerationEnabled(false);
-        chart.setHighlightPerDragEnabled(false);
         Legend lineChartLegend = chart.getLegend();
         lineChartLegend.setEnabled(false);
 
+        //volume x y轴
         XAxis xAxisVolume = chart.getXAxis();
         xAxisVolume.setDrawLabels(false);
         xAxisVolume.setDrawAxisLine(false);
         xAxisVolume.setDrawGridLines(false);
-        xAxisVolume.setTextColor(mAxisColor);
-//        xAxisVolume.setPosition(XAxis.XAxisPosition.BOTTOM);
-//        xAxisVolume.setLabelCount(3, true);
-//        xAxisVolume.setAvoidFirstLastClipping(true);//如果设置为true，则在绘制时会避免“剪掉”在x轴上的图表或屏幕边缘的第一个和最后一个坐标轴标签项。
-//        xAxisVolume.setAxisMinimum(-0.5f);
-//
-//        xAxisVolume.setValueFormatter(new IAxisValueFormatter() {
-//            @Override
-//            public String getFormattedValue(float value, AxisBase axis) {
-//                if (mData.isEmpty()) {
-//                    return "";
-//                }
-//                if (value < 0) {
-//                    value = 0;
-//                }
-//                if (value < mData.size()) {
-//                    return DateUtils.formatDate(mData.get((int) value).getDate(), mDateFormat);
-//                }
-//                return "";
-//            }
-//        });
 
+        //左边y
         YAxis axisLeftVolume = chart.getAxisLeft();
-        axisLeftVolume.setDrawLabels(true);
         axisLeftVolume.setDrawGridLines(false);
-        axisLeftVolume.setLabelCount(3, true);
         axisLeftVolume.setDrawAxisLine(false);
-        axisLeftVolume.setTextColor(mAxisColor);
-        axisLeftVolume.setSpaceTop(10);
-        axisLeftVolume.setSpaceBottom(0);
-        axisLeftVolume.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
-        /*axisLeftVolume.setValueFormatter(new IAxisValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                String s;
-                if (value > 10000) {
-                    s = (int) (value / 10000) + "w";
-                } else if (value > 1000) {
-                    s = (int) (value / 1000) + "k";
-                } else {
-                    s = (int) value + "";
-                }
-                return String.format(Locale.getDefault(), "%1$5s", s);
-            }
-        });*/
-
-        Transformer leftYTransformer = chart.getRendererLeftYAxis().getTransformer();
-        ColorContentYAxisRenderer leftColorContentYAxisRenderer = new ColorContentYAxisRenderer(chart.getViewPortHandler(), chart.getAxisLeft(), leftYTransformer);
-        leftColorContentYAxisRenderer.setLabelInContent(true);
-        leftColorContentYAxisRenderer.setUseDefaultLabelXOffset(false);
-        chart.setRendererLeftYAxis(leftColorContentYAxisRenderer);
+        axisLeftVolume.setSpaceBottom(0f);
 
         //右边y
         YAxis axisRightVolume = chart.getAxisRight();
         axisRightVolume.setDrawLabels(false);
         axisRightVolume.setDrawGridLines(false);
         axisRightVolume.setDrawAxisLine(false);
-
     }
 
     protected void moveToLast(AppCombinedChart chart) {

@@ -32,6 +32,7 @@ import com.guoziwei.klinelib.util.DateUtils;
 import com.guoziwei.klinelib.util.DisplayUtils;
 import com.guoziwei.klinelib.util.DoubleUtil;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -103,13 +104,13 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
 
     protected void initChartPrice() {
         mChartPrice.setScaleEnabled(true);//启用/禁用缩放图表上的两个轴。
-        mChartPrice.setDrawBorders(false);//启用/禁用绘制图表边框（chart周围的线）
+        mChartPrice.setDrawBorders(true);//启用/禁用绘制图表边框（chart周围的线）
+        mChartPrice.setBorderColor(getResources().getColor(R.color.silver));
         mChartPrice.setBorderWidth(1);//设置 chart 边界线的宽度，单位 dp。
-        mChartPrice.setDragEnabled(true);//启用/禁用拖动（平移）图表。
-        mChartPrice.setScaleYEnabled(false);// 启用/禁用缩放在y轴。
         mChartPrice.getDescription().setEnabled(false);//设置图表的描述文字，会显示在图表的右下角。
-        mChartPrice.setAutoScaleMinMaxEnabled(true);//标志，指示自动缩放在y轴已启用。 如果启用Y轴自动调整到最小和当前的X轴的范围，只要视口变化的最大y值。 这是图表显示的财务数据特别有趣
+//        mChartPrice.setAutoScaleMinMaxEnabled(true);//标志，指示自动缩放在y轴已启用。
         mChartPrice.setDragDecelerationEnabled(false);//如果设置为true，手指滑动抛掷图表后继续减速滚动。
+
         LineChartXMarkerView mvx = new LineChartXMarkerView(mContext, mData);
         mvx.setChartView(mChartPrice);
         mChartPrice.setXMarker(mvx);
@@ -119,13 +120,14 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
         Legend lineChartLegend = mChartPrice.getLegend();
         lineChartLegend.setEnabled(false);
 
+
+        //x轴
         XAxis xAxisPrice = mChartPrice.getXAxis();
         xAxisPrice.setDrawLabels(true);//设置为true，则绘制轴的标签
         xAxisPrice.setDrawAxisLine(false);//设置为true，则绘制该行旁边的轴线
         xAxisPrice.setDrawGridLines(false);//设置为true，则绘制网格线。
-        xAxisPrice.setAxisMinimum(-0.5f);//为该轴设置自定义最小值。
-        xAxisPrice.setLabelCount(3, true);
         xAxisPrice.setAvoidFirstLastClipping(true);//如果设置为true，绘制时会避免“剪掉”在x轴上的图表或屏幕边缘的第一个和最后一个坐标轴标签项。
+        xAxisPrice.setLabelCount(3, true);
         xAxisPrice.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxisPrice.setValueFormatter(new IAxisValueFormatter() {
             @Override
@@ -142,6 +144,14 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
                 return "";
             }
         });
+
+        //左边y
+        YAxis yAxisLeft = mChartPrice.getAxisLeft();
+        yAxisLeft.setDrawLabels(false);
+
+        //右边y
+        YAxis yAxisRight = mChartPrice.getAxisRight();
+        yAxisRight.setDrawLabels(false);
     }
 
 
@@ -346,7 +356,7 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
      */
     private void setOffset() {
         int chartHeight = getResources().getDimensionPixelSize(R.dimen.bottom_chart_height);
-        mChartPrice.setViewPortOffsets(0, 0, 0, chartHeight);
+        mChartPrice.setViewPortOffsets(0, 0, 0, 0);
         mChartVolume.setViewPortOffsets(0, 0, 0, DisplayUtils.dip2px(mContext, 20));
         /*float lineLeft = mChartPrice.getViewPortHandler().offsetLeft();
         float barLeft = mChartVolume.getViewPortHandler().offsetLeft();
