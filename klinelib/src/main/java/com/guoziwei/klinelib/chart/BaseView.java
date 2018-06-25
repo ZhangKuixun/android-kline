@@ -7,16 +7,13 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
 import com.github.mikephil.charting.charts.Chart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.utils.Transformer;
 import com.guoziwei.klinelib.R;
 import com.guoziwei.klinelib.model.HisData;
-import com.guoziwei.klinelib.util.DateUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -134,8 +131,13 @@ class BaseView extends LinearLayout {
 
     }
 
-
     protected void moveToLast(AppCombinedChart chart) {
+        if (mData.size() > INIT_COUNT) {
+            chart.moveViewToX(mData.size() - INIT_COUNT);
+        }
+    }
+
+    protected void moveToLast(AppLineChart chart) {
         if (mData.size() > INIT_COUNT) {
             chart.moveViewToX(mData.size() - INIT_COUNT);
         }

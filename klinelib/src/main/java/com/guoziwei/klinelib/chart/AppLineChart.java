@@ -36,6 +36,7 @@ public class AppLineChart extends LineChart {
         mRenderer = new AppLineChartRenderer(this, mAnimator, mViewPortHandler);
     }
 
+
     public void setXMarker(IMarker marker) {
         mXMarker = marker;
     }

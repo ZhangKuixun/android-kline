@@ -37,6 +37,9 @@ public class ColorContentYAxisRenderer extends YAxisRenderer {
         mLabelColorArray = labelColorArray;
     }
 
+    /**
+     * 在内容中设置标签
+     */
     public void setLabelInContent(boolean flag) {
         mLabelInContent = flag;
     }
