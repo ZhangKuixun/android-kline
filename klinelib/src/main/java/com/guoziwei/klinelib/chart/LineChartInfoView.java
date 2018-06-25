@@ -1,5 +1,6 @@
 package com.guoziwei.klinelib.chart;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -42,6 +43,7 @@ public class LineChartInfoView extends ChartInfoView {
         mTvVol = findViewById(R.id.tv_vol);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void setData(double lastClose, HisData data) {
         mTvTime.setText(DateUtils.formatTime(data.getDate()));

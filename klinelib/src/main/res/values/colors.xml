@@ -32,4 +32,33 @@
     <color name="highlight_color">#be945c</color>
     <color name="limit_color">#adadad</color>
     <color name="white">#fff</color>
+
+    <color name="darkBlueGrey">#122642</color>
+    <color name="brightBlue10">#0066ff</color>
+    <color name="dodgerBlue">#33a7fd</color>
+    <color name="orangeyYellow">#ffb620</color>
+    <color name="paleGreyTwo">#f0f0f1</color><!--rgb 240 240 241-->
+    <color name="f_bg_color_01">#32a7fa</color><!--资金背景色1-->
+    <color name="f_bg_color_02">#2491f0</color><!--资金背景色2-->
+    <color name="dodgerBlueTwo">#3d96ff</color><!--61 150 255-->
+    <color name="f_bg_view_color">#f7f8fa</color><!-- rgb 247 248 250 -->
+    <color name="paleBlue">#deedfe</color><!--232 79 73-->
+    <color name="silver">#e8e9eb</color><!--rgb 232 233 235-->
+    <color name="lightGreyBlue">#a4b6cc</color><!-- rgb 164 182 204 -->
+    <color name="greyish">#b3b3b3</color><!--rgb 179 179 179-->
+    <color name="cancel">#909499</color><!--rgb 144 148 153-->
+    <color name="veryLightPink">#fcdddb</color><!--232 79 73-->
+    <color name="paleRed">#e84f49</color><!--232 79 73-->
+    <color name="bg_toast">#cc122642</color><!--18 38 66 0.8-->
+    <color name="bg_q_button">#18b894</color><!--rgb 24 184 148-->
+    <color name="cloudyBlue">#FFCCD4E0</color><!--rgb 204 212 224-->
+    <color name="black">#000000</color><!--rgb 000-->
+    <color name="greyishBrown">#3f3f3f</color><!--rgb 63 63 63-->
+    <color name="brightBlue">#007aff</color>
+    <color name="aPaleBlue">#14e84f49</color><!--rgb 232 79 73 0.08-->
+    <color name="a_bg_q_button">#1418b894</color><!--rgba 24 184 148 0.08-->
+    <color name="buy_color">#18b894</color>
+    <color name="buy_color_light">#4718b894</color>
+    <color name="sell_color">#e84f49</color>
+    <color name="sell_color_light">#47e84f49</color>
 </resources>

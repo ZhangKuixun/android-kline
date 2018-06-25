@@ -87,7 +87,7 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
     public TimeLineView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mContext = context;
-        LayoutInflater.from(context).inflate(R.layout.view_timeline, this);
+        LayoutInflater.from(context).inflate(R.layout.view_timeline_, this);
         mChartPrice = findViewById(R.id.price_chart);
         mChartVolume = findViewById(R.id.vol_chart);
         mChartInfoView = findViewById(R.id.line_info);
@@ -113,50 +113,32 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
         LineChartXMarkerView mvx = new LineChartXMarkerView(mContext, mData);
         mvx.setChartView(mChartPrice);
         mChartPrice.setXMarker(mvx);
+        LineChartYMarkerView mv = new LineChartYMarkerView(mContext, 2);
+        mv.setChartView(mChartPrice);
+        mChartPrice.setMarker(mv);
         Legend lineChartLegend = mChartPrice.getLegend();
         lineChartLegend.setEnabled(false);
 
         XAxis xAxisPrice = mChartPrice.getXAxis();
-        xAxisPrice.setDrawLabels(false);//设置为true，则绘制轴的标签
+        xAxisPrice.setDrawLabels(true);//设置为true，则绘制轴的标签
         xAxisPrice.setDrawAxisLine(false);//设置为true，则绘制该行旁边的轴线
         xAxisPrice.setDrawGridLines(false);//设置为true，则绘制网格线。
         xAxisPrice.setAxisMinimum(-0.5f);//为该轴设置自定义最小值。
-
-        //设置左边Y轴价格
-        YAxis axisLeftPrice = mChartPrice.getAxisLeft();//获得左侧侧坐标轴
-        axisLeftPrice.setLabelCount(5, true);//左侧侧坐标轴有5个刻度
-        axisLeftPrice.setDrawLabels(true);
-        axisLeftPrice.setDrawGridLines(false);
-        axisLeftPrice.setDrawAxisLine(false);
-        axisLeftPrice.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);// 设置X轴的位置
-        axisLeftPrice.setTextColor(mAxisColor);
-        axisLeftPrice.setValueFormatter(new IAxisValueFormatter() {
+        xAxisPrice.setLabelCount(3,true);
+        xAxisPrice.setAvoidFirstLastClipping(true);//如果设置为true，绘制时会避免“剪掉”在x轴上的图表或屏幕边缘的第一个和最后一个坐标轴标签项。
+        xAxisPrice.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxisPrice.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return DoubleUtil.getStringByDigits(value, mDigits);
-            }
-        });
-
-        //设置右边Y轴价格
-        YAxis axisRightPrice = mChartPrice.getAxisRight();
-        axisRightPrice.setLabelCount(5, true);
-        axisRightPrice.setDrawLabels(true);
-        axisRightPrice.setDrawGridLines(false);
-        axisRightPrice.setDrawAxisLine(false);
-        axisRightPrice.setTextColor(mAxisColor);
-        axisRightPrice.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
-        axisRightPrice.setValueFormatter(new IAxisValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                double rate = (value - mLastClose) / mLastClose * 100;
-                if (Double.isNaN(rate) || Double.isInfinite(rate)) {
+                if (mData.isEmpty())
                     return "";
-                }
-                String s = String.format(Locale.getDefault(), "%.2f%%", rate);
-                if (TextUtils.equals("-0.00%", s)) {
-                    return "0.00%";
-                }
-                return s;
+
+                if (value < 0)
+                    value = 0;
+
+                if (value < mData.size())
+                    return DateUtils.formatDate(mData.get((int) value).getDate(), mDateFormat);
+                return "";
             }
         });
 
@@ -239,7 +221,8 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
         setDescription(mChartVolume, "成交量 " + getLastData().getVol());//按给定比例因子放大或缩小。X和Y是变焦中心的坐标（以像素为单位）。
     }
 
-    public void initDatas(List<HisData>... hisDatas) {
+    //5天
+    public final void initDatas(List<HisData>... hisDatas) {
         // 设置标签数量，并让标签居中显示
         XAxis xAxis = mChartVolume.getXAxis();
         xAxis.setLabelCount(hisDatas.length, false);
@@ -328,7 +311,7 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
     private BarDataSet setBar(ArrayList<BarEntry> barEntries, int type) {
         BarDataSet barDataSet = new BarDataSet(barEntries, "vol");
         barDataSet.setHighLightAlpha(120);
-        barDataSet.setHighLightColor(getResources().getColor(R.color.highlight_color));
+        barDataSet.setHighLightColor(getResources().getColor(R.color.darkBlueGrey));
         barDataSet.setDrawValues(false);//启用/禁用 绘制所有 DataSets 数据对象包含的数据的值文本。
         barDataSet.setVisible(type != INVISIABLE_LINE);
         barDataSet.setHighlightEnabled(type != INVISIABLE_LINE);//设置为true，允许通过点击高亮突出 ChartData 对象和其 DataSets
@@ -343,14 +326,16 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
         lineDataSetMa.setDrawValues(false);
         if (type == NORMAL_LINE) {
             lineDataSetMa.setDrawFilled(true);
-            lineDataSetMa.setColor(getResources().getColor(R.color.normal_line_color));
-//            lineDataSetMa.setCircleColor(ContextCompat.getColor(mContext, R.color.normal_line_color));
+            lineDataSetMa.setFillAlpha(25);
+            lineDataSetMa.setFillColor(getResources().getColor(R.color.brightBlue10));
+            lineDataSetMa.setColor(getResources().getColor(R.color.dodgerBlue));
             lineDataSetMa.setCircleColor(mTransparentColor);
+            lineDataSetMa.setHighLightColor(getResources().getColor(R.color.darkBlueGrey));
         } else if (type == NORMAL_LINE_5DAY) {
             lineDataSetMa.setColor(getResources().getColor(R.color.normal_line_color));
             lineDataSetMa.setCircleColor(mTransparentColor);
         } else if (type == AVE_LINE) {
-            lineDataSetMa.setColor(getResources().getColor(R.color.ave_color));
+            lineDataSetMa.setColor(getResources().getColor(R.color.orangeyYellow));
             lineDataSetMa.setCircleColor(mTransparentColor);
             lineDataSetMa.setHighlightEnabled(false);
         } else {
