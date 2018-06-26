@@ -109,17 +109,4 @@ mTimeLineView.initData(hisData);  // 初始化图表数据
 
 欢迎各位提issues和PRs！
 
-**联系方式**
-
-_email: gzw19931217@qq.com_
-
-
-
-## 支持作者
-
-   开发花费了一些时间和精力，如果你觉得对你有所帮助，不妨请我喝杯☕️以鼓励我
-  
-</br><img src="https://github.com/VinsonGuo/android-kline/blob/master/art/alipay.jpg" height="300" hspace="20" />
-
-
 

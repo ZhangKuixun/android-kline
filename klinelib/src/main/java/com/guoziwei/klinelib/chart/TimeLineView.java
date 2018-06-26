@@ -3,8 +3,6 @@ package com.guoziwei.klinelib.chart;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 
@@ -25,18 +23,14 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.Transformer;
-import com.github.mikephil.charting.utils.Utils;
 import com.guoziwei.klinelib.R;
 import com.guoziwei.klinelib.model.HisData;
 import com.guoziwei.klinelib.util.DataUtils;
 import com.guoziwei.klinelib.util.DateUtils;
 import com.guoziwei.klinelib.util.DisplayUtils;
-import com.guoziwei.klinelib.util.DoubleUtil;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * kline
@@ -104,10 +98,13 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
     }
 
     protected void initChartPrice() {
+//        mChartPrice.setScaleXEnabled(true);
         mChartPrice.setScaleEnabled(true);//启用/禁用缩放图表上的两个轴。
         mChartPrice.setDrawBorders(true);//启用/禁用绘制图表边框（chart周围的线）
-        mChartPrice.setBorderColor(getResources().getColor(R.color.silver));
         mChartPrice.setBorderWidth(1);//设置 chart 边界线的宽度，单位 dp。
+        mChartPrice.setDragEnabled(true);
+        mChartPrice.setScaleYEnabled(false);
+        mChartPrice.setBorderColor(getResources().getColor(R.color.silver));
         mChartPrice.getDescription().setEnabled(false);//设置图表的描述文字，会显示在图表的右下角。
         mChartPrice.setAutoScaleMinMaxEnabled(false);//标志，指示自动缩放在y轴已启用。
         mChartPrice.setDragDecelerationEnabled(false);//如果设置为true，手指滑动抛掷图表后继续减速滚动。
@@ -125,7 +122,7 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
         //x轴
         XAxis xAxisPrice = mChartPrice.getXAxis();
         xAxisPrice.setDrawLabels(true);//设置为true，则绘制轴的标签
-//        xAxisPrice.setDrawAxisLine(false);//设置为true，则绘制该行旁边的轴线
+        xAxisPrice.setDrawAxisLine(false);//设置为true，则绘制该行旁边的轴线
         xAxisPrice.setDrawGridLines(false);//设置为true，则绘制网格线。
         xAxisPrice.setAvoidFirstLastClipping(true);//如果设置为true，绘制时会避免“剪掉”在x轴上的图表或屏幕边缘的第一个和最后一个坐标轴标签项。
         xAxisPrice.setLabelCount(7, true);
@@ -146,16 +143,23 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
                 return "";
             }
         });
+        Transformer leftYTransformer = mChartPrice.getRendererLeftYAxis().getTransformer();
+        ColorContentYAxisRenderer leftColorContentYAxisRenderer = new ColorContentYAxisRenderer(mChartPrice.getViewPortHandler(), mChartPrice.getAxisLeft(), leftYTransformer);
+        leftColorContentYAxisRenderer.setLabelInContent(true);
+        leftColorContentYAxisRenderer.setUseDefaultLabelXOffset(false);
+        mChartPrice.setRendererLeftYAxis(leftColorContentYAxisRenderer);
 
         //左边y
         YAxis yAxis = mChartPrice.getAxisLeft();
         yAxis.setDrawLabels(false);
         yAxis.setDrawGridLines(false);
+        yAxis.setDrawAxisLine(false);
 
         //右边y
         YAxis yAxisRight = mChartPrice.getAxisRight();
         yAxisRight.setDrawLabels(false);
         yAxisRight.setDrawGridLines(false);
+        yAxisRight.setDrawAxisLine(false);
     }
 
 
@@ -199,14 +203,11 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
         sets.add(setLine(INVISIABLE_LINE, paddingEntries));
         LineData lineData = new LineData(sets);
 
-//        CombinedData combinedData = new CombinedData();
-//        combinedData.setData(lineData);
         mChartPrice.setData(lineData);
 
         mChartPrice.setVisibleXRange(MAX_COUNT, MIN_COUNT);
 
         mChartPrice.notifyDataSetChanged();
-//        mChartPrice.moveViewToX(combinedData.getEntryCount());
         moveToLast(mChartPrice);
         initChartVolumeData();
 
@@ -359,7 +360,7 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
      * 对齐两张图表
      */
     private void setOffset() {
-        mChartPrice.setViewPortOffsets(0, 0, 0, 20);
+        mChartPrice.setViewPortOffsets(0, 0, 0, DisplayUtils.dip2px(mContext, 15));
         mChartVolume.setViewPortOffsets(0, 0, 0, 0);
 //        int chartHeight = getResources().getDimensionPixelSize(R.dimen.bottom_chart_height);
 //        mChartPrice.setViewPortOffsets(0, 0, 0, chartHeight);
@@ -386,14 +387,13 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
 //        }
     }
 
-
     /**
-     * add limit line to chart
+     * 添加基准线
      */
     public void setLimitLine(double lastClose) {
         LimitLine limitLine = new LimitLine((float) lastClose);
         limitLine.enableDashedLine(5, 10, 0);
-        limitLine.setLineColor(getResources().getColor(R.color.limit_color));
+        limitLine.setLineColor(getResources().getColor(R.color.silver));
         mChartPrice.getAxisLeft().addLimitLine(limitLine);
     }
 
@@ -403,7 +403,7 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
 
     public void setLastClose(double lastClose) {
         mLastClose = lastClose;
-//        mChartPrice.setYCenter((float) lastClose);
+        setLimitLine();
         mChartPrice.setOnChartValueSelectedListener(new InfoViewListener(mContext, mLastClose, mData, mChartInfoView, mChartVolume));
         mChartVolume.setOnChartValueSelectedListener(new InfoViewListener(mContext, mLastClose, mData, mChartInfoView, mChartPrice));
     }

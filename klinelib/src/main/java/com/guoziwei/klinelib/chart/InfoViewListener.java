@@ -53,27 +53,23 @@ public class InfoViewListener implements OnChartValueSelectedListener {
             mInfoView.setVisibility(View.VISIBLE);
             mInfoView.setData(mLastClose, mList.get(x));
         }
-        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mInfoView.getLayoutParams();
-        if (h.getXPx() < mWidth / 2) {// getXPx()高亮点的X坐标
-            lp.gravity = Gravity.RIGHT;
-        } else {
-            lp.gravity = Gravity.LEFT;
-        }
-        mInfoView.setLayoutParams(lp);
-        if (mOtherChart != null) {
-            for (Chart aMOtherChart : mOtherChart) {
+//        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mInfoView.getLayoutParams();
+//        if (h.getXPx() < mWidth / 2) {// getXPx()高亮点的X坐标
+//            lp.gravity = Gravity.RIGHT;
+//        } else {
+//            lp.gravity = Gravity.LEFT;
+//        }
+//        mInfoView.setLayoutParams(lp);
+        if (mOtherChart != null)
+            for (Chart aMOtherChart : mOtherChart)
                 aMOtherChart.highlightValues(new Highlight[]{new Highlight(h.getX(), Float.NaN, h.getDataSetIndex())});
-            }
-        }
     }
 
     @Override
     public void onNothingSelected() {
         mInfoView.setVisibility(View.GONE);
-        if (mOtherChart != null) {
-            for (int i = 0; i < mOtherChart.length; i++) {
-                mOtherChart[i].highlightValues(null);
-            }
-        }
+        if (mOtherChart != null)
+            for (Chart aMOtherChart : mOtherChart)
+                aMOtherChart.highlightValues(null);
     }
 }

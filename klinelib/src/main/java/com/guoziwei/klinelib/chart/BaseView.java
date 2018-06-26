@@ -11,7 +11,6 @@ import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.utils.Transformer;
 import com.guoziwei.klinelib.R;
 import com.guoziwei.klinelib.model.HisData;
 
@@ -56,10 +55,15 @@ class BaseView extends LinearLayout {
 
     //底部柱状图
     protected void initBottomChart(AppCombinedChart chart) {
+//        chart.setScaleXEnabled(true);
         chart.setScaleEnabled(true);//启用/禁用缩放图表上的两个轴。
         chart.setDrawBorders(true);//启用/禁用绘制图表边框（chart周围的线）
-        chart.setBorderColor(getResources().getColor(R.color.silver));
         chart.setBorderWidth(1);
+        chart.setDragEnabled(true);
+        chart.setScaleYEnabled(false);
+        chart.setAutoScaleMinMaxEnabled(true);
+        chart.setDragDecelerationEnabled(false);
+        chart.setBorderColor(getResources().getColor(R.color.silver));
         Legend lineChartLegend = chart.getLegend();
         lineChartLegend.setEnabled(false);
 
