@@ -1,9 +1,5 @@
 package com.guoziwei.klinelib.chart;
 
-/**
- * Created by Administrator on 2016/2/1.
- */
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.widget.TextView;

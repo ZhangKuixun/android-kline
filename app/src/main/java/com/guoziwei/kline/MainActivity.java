@@ -16,7 +16,8 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = findViewById(R.id.tab);
         final ViewPager viewPager = findViewById(R.id.view_pager);
         Fragment[] fragments = {TimeLineChartFragment.newInstance(1), FiveDayChartFragment.newInstance(),
-                KLineChartFragment.newInstance(1), KLineChartFragment.newInstance(7),
+                KLineChartFragment.newInstance(1),
+                KLineChartFragment.newInstance(7),
                 KLineChartFragment.newInstance(30)};
         String[] titles = {"分时图", "5Day", "日K", "周K", "月"};
         viewPager.setOffscreenPageLimit(fragments.length);

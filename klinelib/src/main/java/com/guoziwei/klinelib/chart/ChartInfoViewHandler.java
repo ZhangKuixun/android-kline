@@ -1,5 +1,6 @@
 package com.guoziwei.klinelib.chart;
 
+import android.annotation.SuppressLint;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,7 +15,7 @@ import com.github.mikephil.charting.highlight.Highlight;
 
 public class ChartInfoViewHandler implements View.OnTouchListener {
 
-    private BarLineChartBase mChart;
+    private final BarLineChartBase mChart;
     private final GestureDetector mDetector;
 
     private boolean mIsLongPress = false;
@@ -24,8 +25,8 @@ public class ChartInfoViewHandler implements View.OnTouchListener {
         //1、创建一个手势识别器;2、实现手势识别器回到接口-----在里面处理各个手势对应的代码
         mDetector = new GestureDetector(mChart.getContext(), new GestureDetector.SimpleOnGestureListener() {
             /**
-             * 用户轻触触摸屏，尚未松开或拖动，由一个1个MotionEvent ACTION_DOWN触发
-             * 注意和onDown()的区别，强调的是没有松开或者拖动的状态 (单击没有松开或者移动时候就触发此事件，再触发onLongPress事件)
+             * 用户轻触触摸屏，尚未松开或拖动，由一个1个 MotionEvent ACTION_DOWN 触发
+             * 注意和 onDown() 的区别，强调的是没有松开或者拖动的状态 (单击没有松开或者移动时候就触发此事件，再触发 onLongPress 事件)
              */
             @Override
             public void onLongPress(MotionEvent e) {
@@ -42,12 +43,13 @@ public class ChartInfoViewHandler implements View.OnTouchListener {
     }
 
     /**
-     * 3、将MotionEvent  事件传给GestureDetector处理
+     * 3、将 MotionEvent  事件传给 GestureDetector 处理
      * <p>
-     * MotionEvent 可以来自OnTouchEvent(MotionEvent event) 或者来自OnTouchListener的onTouch(View view,MotionEvent event);
-     * 这里使用来自OnTouchEvent(MotionEvent event)的效果是一样的
+     * MotionEvent 可以来自 OnTouchEvent(MotionEvent event) 或者来自 OnTouchListener 的 onTouch(View view,MotionEvent event);
+     * 这里使用来自 OnTouchEvent(MotionEvent event) 的效果是一样的
      */
     @Override
+    @SuppressLint("ClickableViewAccessibility")
     public boolean onTouch(View v, MotionEvent event) {
         mDetector.onTouchEvent(event);
         if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {

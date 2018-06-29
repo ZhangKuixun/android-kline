@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_Focus"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <!--开-->
+    <TextView
+        android:id="@+id/tv_open"
+        style="@style/warp_content.chartTopDarkBlueGrey"
+        android:layout_marginStart="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_6"
+        android:text="@string/open" />
+
+    <TextView
+        android:id="@+id/tv_openN"
+        style="@style/warp_content.chartTopGreen"
+        android:layout_alignBaseline="@+id/tv_open"
+        android:layout_marginStart="@dimen/dp_4"
+        android:layout_toEndOf="@+id/tv_open"
+        android:text="@string/_0_060785" />
+
+    <!--幅-->
+    <TextView
+        android:id="@+id/tv_range"
+        style="@style/warp_content.chartTopDarkBlueGrey"
+        android:layout_below="@+id/tv_open"
+        android:layout_marginBottom="@dimen/dp_4"
+        android:layout_marginStart="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_2"
+        android:text="@string/range" />
+
+    <TextView
+        style="@style/warp_content.chartTopGreen"
+        android:id="@+id/tv_rangeN"
+        android:layout_alignBaseline="@+id/tv_range"
+        android:layout_marginStart="@dimen/dp_4"
+        android:layout_toEndOf="@+id/tv_range"
+        android:text="@string/_1_96" />
+
+    <!--高-->
+    <TextView
+        android:id="@+id/tv_high"
+        style="@style/warp_content.chartTopDarkBlueGrey"
+        android:layout_alignBaseline="@+id/tv_open"
+        android:layout_marginStart="@dimen/dp_58"
+        android:layout_toEndOf="@+id/tv_openN"
+        android:text="@string/high" />
+
+    <TextView
+        android:id="@+id/tv_highN"
+        style="@style/warp_content.chartTopGreen"
+        android:layout_alignBaseline="@+id/tv_open"
+        android:layout_marginStart="@dimen/dp_4"
+        android:layout_toEndOf="@+id/tv_high"
+        android:text="@string/_0_062096" />
+
+    <!--额-->
+    <TextView
+        android:id="@+id/tv_vol"
+        style="@style/warp_content.chartTopDarkBlueGrey"
+        android:layout_alignBaseline="@+id/tv_range"
+        android:layout_alignStart="@+id/tv_high"
+        android:text="@string/vol_" />
+
+    <TextView
+        android:id="@+id/tv_volN"
+        style="@style/warp_content.chartTopGreen"
+        android:layout_alignBaseline="@+id/tv_range"
+        android:layout_marginStart="@dimen/dp_4"
+        android:layout_toEndOf="@+id/tv_vol"
+        android:text="@string/_9333_995145" />
+
+    <!--低-->
+    <TextView
+        android:id="@+id/tv_low"
+        style="@style/warp_content.chartTopDarkBlueGrey"
+        android:layout_alignBaseline="@+id/tv_open"
+        android:layout_marginStart="@dimen/dp_58"
+        android:layout_toEndOf="@+id/tv_highN"
+        android:text="@string/low" />
+
+    <TextView
+        android:id="@+id/tv_lowN"
+        style="@style/warp_content.chartTopGreen"
+        android:layout_alignBaseline="@+id/tv_open"
+        android:layout_marginStart="@dimen/dp_4"
+        android:layout_toEndOf="@+id/tv_low"
+        android:text="@string/_0_061_00" />
+
+    <!--时间-->
+    <TextView
+        android:id="@+id/tv_date"
+        style="@style/warp_content.chartTopDarkBlueGrey"
+        android:layout_alignBaseline="@+id/tv_range"
+        android:layout_alignStart="@+id/tv_low"
+        android:text="@string/_2018_04_11_08_00" />
+
+    <!--收-->
+    <TextView
+        android:id="@+id/tv_close"
+        style="@style/warp_content.chartTopDarkBlueGrey"
+        android:layout_alignBaseline="@+id/tv_open"
+        android:layout_marginStart="@dimen/dp_58"
+        android:layout_toEndOf="@+id/tv_lowN"
+        android:text="@string/buy" />
+
+    <TextView
+        android:id="@+id/tv_closeN"
+        style="@style/warp_content.chartTopGreen"
+        android:layout_alignBaseline="@+id/tv_open"
+        android:layout_marginStart="@dimen/dp_4"
+        android:layout_toEndOf="@+id/tv_close"
+        android:text="@string/_0_061211" />
+</RelativeLayout>

@@ -1,6 +1,18 @@
 <resources>
     <string name="app_name">KLine</string>
     <string name="loading">加载中</string>
+    <string name="_1">1小时</string>
+    <string name="_2">2小时</string>
+    <string name="_4">4小时</string>
+    <string name="_6">6小时</string>
+    <string name="_12">12小时</string>
+    <string name="_1m">1分</string>
+    <string name="_5m">5分</string>
+    <string name="_15m">15分</string>
+    <string name="_30m">30分</string>
+    <string name="_timeK">分时</string>
+    <string name="_dayK">日线</string>
+    <string name="_weekK">周线</string>
 
 
 </resources>

@@ -7,14 +7,14 @@
         android:id="@+id/kline"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_toLeftOf="@+id/rg_index" />
+        android:layout_toStartOf="@+id/rg_index" />
 
     <RadioGroup
         android:id="@+id/rg_index"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:orientation="vertical">
 
         <RadioButton

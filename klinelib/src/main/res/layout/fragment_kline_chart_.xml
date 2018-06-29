@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -7,11 +8,10 @@
     <RelativeLayout
         android:id="@+id/rl_title"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_40"
-        android:visibility="visible">
+        android:layout_height="@dimen/dp_40">
 
         <TextView
-            android:id="@+id/tv_currency"
+            android:id="@+id/tv_unCurrency"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/dp_16"
@@ -21,40 +21,40 @@
             android:textSize="@dimen/sp_16" />
 
         <TextView
-            android:id="@+id/tv_price"
+            android:id="@+id/tv_unPrice"
             android:layout_width="@dimen/dp_120"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/dp_10"
-            android:layout_toEndOf="@+id/tv_currency"
+            android:layout_toEndOf="@+id/tv_unCurrency"
             android:gravity="center_vertical"
             android:text="-0.00005"
             android:textColor="@color/topaz"
             android:textSize="@dimen/sp_14" />
 
         <TextView
-            android:id="@+id/tv_riseAndFall"
+            android:id="@+id/tv_unRiseAndFall"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/dp_10"
-            android:layout_toEndOf="@+id/tv_price"
+            android:layout_toEndOf="@+id/tv_unPrice"
             android:gravity="center_vertical"
             android:text="0.013244"
             android:textColor="@color/paleRed"
             android:textSize="@dimen/sp_12" />
 
         <TextView
-            android:id="@+id/tv_riseAndFall1"
+            android:id="@+id/tv_unRiseAndFall1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/dp_8"
-            android:layout_toEndOf="@+id/tv_riseAndFall"
+            android:layout_toEndOf="@+id/tv_unRiseAndFall"
             android:gravity="center_vertical"
             android:text="-0.00%"
             android:textColor="@color/paleRed"
             android:textSize="@dimen/sp_12" />
 
         <TextView
-            android:id="@+id/tv_time"
+            android:id="@+id/tv_unTime"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="end"
@@ -67,70 +67,78 @@
 
         <ImageView
             android:id="@+id/back"
-            android:layout_width="@dimen/dp_20"
-            android:layout_height="@dimen/dp_20"
+            android:layout_width="@dimen/dp_50"
+            android:layout_height="@dimen/dp_40"
             android:layout_alignParentEnd="true"
-            android:layout_centerInParent="true"
             android:layout_gravity="end"
-            android:layout_marginEnd="@dimen/dp_40"
+            android:padding="@dimen/dp_20"
+            android:scaleType="center"
             app:srcCompat="@drawable/ic_close_black_24dp" />
     </RelativeLayout>
 
-    <!--提示信息-->
-    <com.guoziwei.klinelib.chart.LineChartInfoView
-        android:id="@+id/line_info"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/dp_40"
-        android:visibility="gone" />
-
-    <com.guoziwei.klinelib.chart.CustomLineChart
-        android:id="@+id/price_chart"
+    <com.guoziwei.klinelib.chart.KLineView
+        android:id="@+id/kline"
         android:layout_width="match_parent"
-        android:layout_height="210dp"
-        android:layout_marginEnd="@dimen/dp_10"
-        android:layout_marginTop="@dimen/dp_40"
-        android:layout_toStartOf="@+id/rl_newTransaction"
-        android:background="@color/white" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_title"
+        android:layout_marginBottom="@dimen/dp_6"
+        android:layout_toStartOf="@+id/ll_index" />
 
-    <com.guoziwei.klinelib.chart.CustomCombinedChart
-        android:id="@+id/vol_chart"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_alignEnd="@+id/price_chart"
-        android:layout_below="@+id/price_chart"
-        android:background="@color/white" />
-
-    <RelativeLayout
-        android:id="@+id/rl_newTransaction"
-        android:layout_width="@dimen/dp_126"
+    <LinearLayout
+        android:id="@+id/ll_index"
+        android:layout_width="@dimen/dp_60"
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/price_chart"
+        android:layout_marginBottom="@dimen/dp_6"
+        android:layout_marginStart="@dimen/dp_6"
+        android:layout_marginTop="@dimen/dp_40"
         android:background="@drawable/bg_silver_border"
-        android:padding="@dimen/dp_2">
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/text"
-            style="@style/warp_content.chartRight"
-            android:text="@string/price" />
+            style="@style/heightWrapContent.chartRight"
+            android:text="@string/hostMap" />
 
         <TextView
-            style="@style/warp_content.chartRight"
-            android:layout_alignParentEnd="true"
-            android:text="@string/number" />
+            android:id="@+id/tv_sma"
+            style="@style/heightWrapContent.chartRight.content"
+            android:text="@string/sma" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerIn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/text" />
+        <TextView
+            android:id="@+id/tv_ema"
+            style="@style/heightWrapContent.chartRight.content"
+            android:text="@string/ema" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerOut"
+        <TextView
+            android:id="@+id/tv_boll"
+            style="@style/heightWrapContent.chartRight.content"
+            android:text="@string/boll" />
+
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/recyclerIn"
-            android:layout_marginTop="@dimen/dp_20" />
-    </RelativeLayout>
+            android:layout_height="@dimen/dp_1"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_10"
+            android:background="@color/silver" />
+
+        <TextView
+            style="@style/heightWrapContent.chartRight"
+            android:text="@string/deputyMap" />
+
+        <TextView
+            android:id="@+id/tv_vols"
+            style="@style/heightWrapContent.chartRight.content"
+            android:text="@string/vol" />
+
+        <TextView
+            android:id="@+id/tv_macd"
+            style="@style/heightWrapContent.chartRight.content"
+            android:text="@string/macd" />
+
+        <TextView
+            android:id="@+id/tv_kdj"
+            style="@style/heightWrapContent.chartRight.content"
+            android:text="@string/kdj" />
+    </LinearLayout>
 
 </RelativeLayout>

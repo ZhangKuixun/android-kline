@@ -21,6 +21,10 @@ android {
     repositories {
         maven { url "https://jitpack.io" }
     }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
 }
 
 dependencies {
@@ -31,7 +35,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation 'com.google.code.gson:gson:2.8.2'
-    implementation 'com.android.support:design:27.1.1'
+//    implementation 'com.android.support:design:27.1.1'
 //  compile 'com.github.VinsonGuo:android-kline:1.0.3'
     implementation project(':klinelib')
 }

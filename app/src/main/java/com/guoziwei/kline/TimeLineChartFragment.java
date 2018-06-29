@@ -5,16 +5,20 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.guoziwei.klinelib.chart.TimeLineView;
+import com.guoziwei.klinelib.chart.list.BusinessAdapter;
+import com.guoziwei.klinelib.chart.list.BusinessBean;
 import com.guoziwei.klinelib.model.HisData;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class TimeLineChartFragment extends Fragment {
@@ -45,9 +49,12 @@ public class TimeLineChartFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mTimeLineView = new TimeLineView(getContext());
+        mTimeLineView.findViewById(R.id.back).setOnClickListener(this::back);
+        recycler();
+
         mTimeLineView.setDateFormat("HH:mm");
-        int count = 241;
-        mTimeLineView.setCount(count, count, count);
+        int count = 121;
+        mTimeLineView.setCount(count, count, 36);
         initData();
         return mTimeLineView;
     }
@@ -56,41 +63,30 @@ public class TimeLineChartFragment extends Fragment {
         final List<HisData> hisData = Util.get1Day(getContext());
         mTimeLineView.setLastClose(hisData.get(0).getClose());
         mTimeLineView.initData(hisData);
-
-        /*new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                mTimeLineView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        int index = (int) (Math.random() * 100);
-                        HisData data = hisData.get(index);
-                        HisData lastData = hisData.get(hisData.size() - 1);
-                        HisData newData = new HisData();
-                        newData.setVol(data.getVol());
-                        newData.setClose(data.getClose());
-                        newData.setHigh(Math.max(data.getHigh(), lastData.getClose()));
-                        newData.setLow(Math.min(data.getLow(), lastData.getClose()));
-                        newData.setOpen(lastData.getClose());
-                        newData.setDate(System.currentTimeMillis());
-                        hisData.add(newData);
-                        mTimeLineView.addData(newData);
-                    }
-                });
-            }
-        }, 1000, 500);*/
-
-       /* new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                mTimeLineView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mTimeLineView.refreshData((float) (hisData.get(0).getClose() + 10 * Math.random()));
-                    }
-                });
-            }
-        }, 1000, 1000);*/
     }
 
+    private void back(View view) {
+        Log.e("kevin", "back");
+    }
+
+    public void recycler() {
+        RecyclerView recyclerIn = mTimeLineView.findViewById(com.guoziwei.klinelib.R.id.recyclerIn);
+        RecyclerView recyclerOut = mTimeLineView.findViewById(com.guoziwei.klinelib.R.id.recyclerOut);
+
+        configureAdapter(recyclerIn, true);
+        configureAdapter(recyclerOut, false);
+    }
+
+    private void configureAdapter(RecyclerView recyclerView, boolean type) {
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        ArrayList<BusinessBean> businessBeans = new ArrayList<>(10);
+        for (int i = 0; i < 10; i++) {
+            BusinessBean bean = new BusinessBean();
+            bean.price = 0.7668;
+            bean.number = 11655.38;
+            businessBeans.add(i, bean);
+        }
+        BusinessAdapter adapter = new BusinessAdapter(com.guoziwei.klinelib.R.layout.business, businessBeans, type, getResources());
+        recyclerView.setAdapter(adapter);
+    }
 }

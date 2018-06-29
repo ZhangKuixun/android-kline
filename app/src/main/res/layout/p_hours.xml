@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/paleGrey">
+
+    <TextView
+        android:id="@+id/p_hour"
+        style="@style/heightMatchTwelve" />
+
+    <TextView
+        android:id="@+id/p_2hours"
+        style="@style/heightMatchTwelve"
+        android:layout_toEndOf="@+id/p_hour" />
+
+    <TextView
+        android:id="@+id/p_4hours"
+        style="@style/heightMatchTwelve"
+        android:layout_toEndOf="@+id/p_2hours" />
+
+    <TextView
+        android:id="@+id/p_6hours"
+        style="@style/heightMatchTwelve"
+        android:layout_toEndOf="@+id/p_4hours" />
+
+    <TextView
+        android:id="@+id/p_12hours"
+        style="@style/heightMatchTwelve"
+        android:layout_toEndOf="@+id/p_6hours" />
+</RelativeLayout>

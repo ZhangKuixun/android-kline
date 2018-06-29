@@ -16,7 +16,6 @@ import com.github.mikephil.charting.listener.OnChartGestureListener;
 public class CoupleChartGestureListener implements OnChartGestureListener {
 
     private static final String TAG = CoupleChartGestureListener.class.getSimpleName();
-
     private BarLineChartBase srcChart;
     private Chart[] dstCharts;
 
@@ -59,18 +58,16 @@ public class CoupleChartGestureListener implements OnChartGestureListener {
 
     @Override
     public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
-        syncCharts();
-        if (listener != null) {
+        if (listener != null)
             listener.onAxisChange(srcChart);
-        }
+        syncCharts();
     }
 
     @Override
     public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
 //        Log.d(TAG, "onChartScale " + scaleX + "/" + scaleY + " X=" + me.getX() + "Y=" + me.getY());
-        if (listener != null) {
+        if (listener != null)
             listener.onAxisChange(srcChart);
-        }
         syncCharts();
     }
 
@@ -78,9 +75,8 @@ public class CoupleChartGestureListener implements OnChartGestureListener {
     public void onChartTranslate(MotionEvent me, float dX, float dY) {
 //        Log.d(TAG, "onChartTranslate " + dX + "/" + dY + " X=" + me.getX() + "Y=" + me.getY());
 //        Log.d(TAG, "getHighestVisibleX  " +srcChart.getHighestVisibleX());
-        if (listener != null) {
+        if (listener != null)
             listener.onAxisChange(srcChart);
-        }
         syncCharts();
     }
 

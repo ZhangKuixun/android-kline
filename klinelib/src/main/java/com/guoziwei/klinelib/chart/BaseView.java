@@ -8,9 +8,9 @@ import android.widget.LinearLayout;
 
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.components.Description;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.utils.Transformer;
 import com.guoziwei.klinelib.R;
 import com.guoziwei.klinelib.model.HisData;
 
@@ -49,58 +49,64 @@ class BaseView extends LinearLayout {
         super(context, attrs, defStyleAttr);
         mAxisColor = ContextCompat.getColor(getContext(), R.color.axis_color);
         mTransparentColor = ContextCompat.getColor(getContext(), android.R.color.transparent);
-        mDecreasingColor = ContextCompat.getColor(getContext(), R.color.decreasing_color);
-        mIncreasingColor = ContextCompat.getColor(getContext(), R.color.increasing_color);
+        mDecreasingColor = ContextCompat.getColor(getContext(), R.color.topaz);
+        mIncreasingColor = ContextCompat.getColor(getContext(), R.color.paleRed);
     }
 
     //底部柱状图
-    protected void initBottomChart(AppCombinedChart chart) {
-//        chart.setScaleXEnabled(true);
-        chart.setScaleEnabled(true);//启用/禁用缩放图表上的两个轴。
-        chart.setDrawBorders(true);//启用/禁用绘制图表边框（chart周围的线）
+    protected void initBottomChart(CustomCombinedChart chart) {
         chart.setBorderWidth(1);
+        chart.setDrawBorders(true);
         chart.setDragEnabled(true);
+        chart.setScaleEnabled(true);
         chart.setScaleYEnabled(false);
+        chart.getLegend().setEnabled(false);
         chart.setAutoScaleMinMaxEnabled(true);
         chart.setDragDecelerationEnabled(false);
         chart.setBorderColor(getResources().getColor(R.color.silver));
-        Legend lineChartLegend = chart.getLegend();
-        lineChartLegend.setEnabled(false);
 
-        //volume x y轴
+        //x
         XAxis xAxisVolume = chart.getXAxis();
         xAxisVolume.setDrawLabels(false);
+        xAxisVolume.setAxisMinimum(-0.5f);
         xAxisVolume.setDrawAxisLine(false);
         xAxisVolume.setDrawGridLines(false);
+        xAxisVolume.setAvoidFirstLastClipping(true);
 
-        //左边y
+        //left y
         YAxis axisLeftVolume = chart.getAxisLeft();
-        axisLeftVolume.setDrawGridLines(false);
-        axisLeftVolume.setDrawAxisLine(false);
-        axisLeftVolume.setSpaceBottom(0f);
         axisLeftVolume.setSpaceTop(0f);
+        axisLeftVolume.setSpaceBottom(0f);
+        axisLeftVolume.setDrawAxisLine(false);
+        axisLeftVolume.setDrawGridLines(false);
 
-        //右边y
+        // Left Y Renderer
+        Transformer leftYTransformer = chart.getRendererLeftYAxis().getTransformer();
+        ColorContentYAxisRenderer renderer = new ColorContentYAxisRenderer(chart.getViewPortHandler(), chart.getAxisLeft(), leftYTransformer);
+        renderer.setLabelInContent(true);
+        renderer.setUseDefaultLabelXOffset(false);
+        chart.setRendererLeftYAxis(renderer);
+
+        //right y
         YAxis axisRightVolume = chart.getAxisRight();
         axisRightVolume.setDrawLabels(false);
-        axisRightVolume.setDrawGridLines(false);
         axisRightVolume.setDrawAxisLine(false);
+        axisRightVolume.setDrawGridLines(false);
     }
 
-    protected void moveToLast(AppCombinedChart chart) {
-        if (mData.size() > INIT_COUNT) {
+    protected void moveToLast(CustomCombinedChart chart) {
+        if (mData.size() > INIT_COUNT)
             chart.moveViewToX(mData.size() - INIT_COUNT);
-        }
     }
 
-    protected void moveToLast(AppLineChart chart) {
-        if (mData.size() > INIT_COUNT) {
+    protected void moveToLast(CustomLineChart chart) {
+        if (mData.size() > INIT_COUNT)
             chart.moveViewToX(mData.size() - INIT_COUNT);
-        }
     }
 
     /**
-     * set the count of k chart
+     * 设置图标的可见个数，分别是初始值，最大值，最小值。
+     * 比如(100,300,50)就是开始的时候100个点，最小可以缩放到300个点，最大可以放大到50个点
      */
     public void setCount(int init, int max, int min) {
         INIT_COUNT = init;
@@ -122,6 +128,9 @@ class BaseView extends LinearLayout {
         return null;
     }
 
+    /**
+     * 设置x轴时间的格式
+     */
     public void setDateFormat(String mDateFormat) {
         this.mDateFormat = mDateFormat;
     }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/warp_content">
+
+    <TextView
+        android:id="@+id/price"
+        style="@style/warp_content.chartTopPaleRed" />
+
+    <TextView
+        android:id="@+id/number"
+        style="@style/warp_content.chartTopPaleRed"
+        android:layout_alignBaseline="@+id/price"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>

@@ -5,10 +5,10 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 
 import com.github.mikephil.charting.charts.BarLineChartBase;
 import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -22,7 +22,6 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.utils.Transformer;
 import com.guoziwei.klinelib.R;
 import com.guoziwei.klinelib.model.HisData;
 import com.guoziwei.klinelib.util.DataUtils;
@@ -51,11 +50,10 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
      */
     public static final int INVISIABLE_LINE = 6;
 
-    protected AppLineChart mChartPrice;//内容
-    protected AppCombinedChart mChartVolume;//底部
+    protected CustomLineChart mChartPrice;//内容
+    protected CustomCombinedChart mChartVolume;//底部
 
     protected ChartInfoView mChartInfoView;//选中后的提示信息
-    protected Context mContext;
 
     /**
      * 最后价格
@@ -66,11 +64,7 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
      * 昨日收盘价
      */
     private double mLastClose;
-
-    /**
-     * 符号的数字
-     */
-    private int mDigits = 2;
+    private View mTitle;
 
     public TimeLineView(Context context) {
         this(context, null);
@@ -82,12 +76,12 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
 
     public TimeLineView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        mContext = context;
         LayoutInflater.from(context).inflate(R.layout.view_timeline_, this);
         mChartPrice = findViewById(R.id.price_chart);
         mChartVolume = findViewById(R.id.vol_chart);
+        mTitle = findViewById(R.id.rl_title);
         mChartInfoView = findViewById(R.id.line_info);
-
+        mChartInfoView.setTitle(mTitle);
         mChartInfoView.setChart(mChartPrice, mChartVolume);
 
         mChartPrice.setNoDataText(context.getString(R.string.loading));
@@ -98,36 +92,35 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
     }
 
     protected void initChartPrice() {
-//        mChartPrice.setScaleXEnabled(true);
-        mChartPrice.setScaleEnabled(true);//启用/禁用缩放图表上的两个轴。
-        mChartPrice.setDrawBorders(true);//启用/禁用绘制图表边框（chart周围的线）
-        mChartPrice.setBorderWidth(1);//设置 chart 边界线的宽度，单位 dp。
+        mChartPrice.setBorderWidth(1);
+        mChartPrice.setDrawBorders(true);
         mChartPrice.setDragEnabled(true);
+        mChartPrice.setScaleEnabled(true);
         mChartPrice.setScaleYEnabled(false);
+        mChartPrice.getLegend().setEnabled(false);
+        mChartPrice.setAutoScaleMinMaxEnabled(false);
+        mChartPrice.setDragDecelerationEnabled(false);
+        mChartPrice.getDescription().setEnabled(false);
         mChartPrice.setBorderColor(getResources().getColor(R.color.silver));
-        mChartPrice.getDescription().setEnabled(false);//设置图表的描述文字，会显示在图表的右下角。
-        mChartPrice.setAutoScaleMinMaxEnabled(false);//标志，指示自动缩放在y轴已启用。
-        mChartPrice.setDragDecelerationEnabled(false);//如果设置为true，手指滑动抛掷图表后继续减速滚动。
 
         //marker
-        LineChartXMarkerView mvx = new LineChartXMarkerView(mContext, mData);
+        LineChartXMarkerView mvx = new LineChartXMarkerView(getContext(), mData);
         mvx.setChartView(mChartPrice);
         mChartPrice.setXMarker(mvx);
-        LineChartYMarkerView mv = new LineChartYMarkerView(mContext, 2);
+        LineChartYMarkerView mv = new LineChartYMarkerView(getContext(), 2);
         mv.setChartView(mChartPrice);
         mChartPrice.setMarker(mv);
-        Legend lineChartLegend = mChartPrice.getLegend();
-        lineChartLegend.setEnabled(false);
 
-        //x轴
+        //x axis
         XAxis xAxisPrice = mChartPrice.getXAxis();
-        xAxisPrice.setDrawLabels(true);//设置为true，则绘制轴的标签
-        xAxisPrice.setDrawAxisLine(false);//设置为true，则绘制该行旁边的轴线
-        xAxisPrice.setDrawGridLines(false);//设置为true，则绘制网格线。
-        xAxisPrice.setAvoidFirstLastClipping(true);//如果设置为true，绘制时会避免“剪掉”在x轴上的图表或屏幕边缘的第一个和最后一个坐标轴标签项。
+        xAxisPrice.setDrawLabels(true);
+        xAxisPrice.setAxisMinimum(-0.5f);
+        xAxisPrice.setDrawAxisLine(false);
+        xAxisPrice.setDrawGridLines(false);
+        xAxisPrice.setAvoidFirstLastClipping(true);
         xAxisPrice.setLabelCount(7, true);
-        xAxisPrice.setTextColor(getResources().getColor(R.color.coolGrey));
         xAxisPrice.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxisPrice.setTextColor(getResources().getColor(R.color.coolGrey));
         xAxisPrice.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
@@ -143,36 +136,30 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
                 return "";
             }
         });
-        Transformer leftYTransformer = mChartPrice.getRendererLeftYAxis().getTransformer();
-        ColorContentYAxisRenderer leftColorContentYAxisRenderer = new ColorContentYAxisRenderer(mChartPrice.getViewPortHandler(), mChartPrice.getAxisLeft(), leftYTransformer);
-        leftColorContentYAxisRenderer.setLabelInContent(true);
-        leftColorContentYAxisRenderer.setUseDefaultLabelXOffset(false);
-        mChartPrice.setRendererLeftYAxis(leftColorContentYAxisRenderer);
 
-        //左边y
+        //left y
         YAxis yAxis = mChartPrice.getAxisLeft();
-        yAxis.setDrawLabels(false);
         yAxis.setDrawGridLines(false);
         yAxis.setDrawAxisLine(false);
+        yAxis.setDrawLabels(false);
 
-        //右边y
+        //right y
         YAxis yAxisRight = mChartPrice.getAxisRight();
-        yAxisRight.setDrawLabels(false);
         yAxisRight.setDrawGridLines(false);
         yAxisRight.setDrawAxisLine(false);
+        yAxisRight.setDrawLabels(false);
     }
 
 
     @SuppressLint("ClickableViewAccessibility")
     private void initChartListener() {
-        //多表联动滚动
+        //滚动
         mChartPrice.setOnChartGestureListener(new CoupleChartGestureListener(this, mChartPrice, mChartVolume));
         mChartVolume.setOnChartGestureListener(new CoupleChartGestureListener(this, mChartVolume, mChartPrice));
-        //多表联动缩放
-        mChartPrice.setOnChartValueSelectedListener(new InfoViewListener(mContext, mLastClose, mData, mChartInfoView, mChartVolume));
-        mChartVolume.setOnChartValueSelectedListener(new InfoViewListener(mContext, mLastClose, mData, mChartInfoView, mChartPrice));
-
-        //手势监听
+        //缩放
+        mChartPrice.setOnChartValueSelectedListener(new InfoViewListener(mLastClose, mData, mTitle,mChartInfoView, mChartVolume));
+        mChartVolume.setOnChartValueSelectedListener(new InfoViewListener(mLastClose, mData, mTitle,mChartInfoView, mChartPrice));
+        //点击
         mChartPrice.setOnTouchListener(new ChartInfoViewHandler(mChartPrice));
         mChartVolume.setOnTouchListener(new ChartInfoViewHandler(mChartVolume));
     }
@@ -211,13 +198,13 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
         moveToLast(mChartPrice);
         initChartVolumeData();
 
-        mChartPrice.getXAxis().setAxisMaximum(lineData.getXMax() + 0.5f);//为该轴设置自定义最大值。
-        mChartVolume.getXAxis().setAxisMaximum(mChartVolume.getData().getXMax() + 0.5f);//为该轴设置自定义最大值。
+        mChartPrice.getXAxis().setAxisMaximum(lineData.getXMax() + 0.5f);
+        mChartVolume.getXAxis().setAxisMaximum(mChartVolume.getData().getXMax() + 0.5f);
 
         mChartPrice.zoom(MAX_COUNT * 1f / INIT_COUNT, 0, 0, 0);
         mChartVolume.zoom(MAX_COUNT * 1f / INIT_COUNT, 0, 0, 0);
 
-        setDescription(mChartVolume, "成交量 " + getLastData().getVol());//按给定比例因子放大或缩小。X和Y是变焦中心的坐标（以像素为单位）。
+        setDescription(mChartVolume, "成交量 " + getLastData().getVol());
     }
 
 
@@ -225,10 +212,10 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
         BarDataSet barDataSet = new BarDataSet(barEntries, "vol");
         barDataSet.setHighLightAlpha(120);
         barDataSet.setHighLightColor(getResources().getColor(R.color.darkBlueGrey));
-        barDataSet.setDrawValues(false);//启用/禁用 绘制所有 DataSets 数据对象包含的数据的值文本。
+        barDataSet.setDrawValues(false);
         barDataSet.setVisible(type != INVISIABLE_LINE);
-        barDataSet.setHighlightEnabled(type != INVISIABLE_LINE);//设置为true，允许通过点击高亮突出 ChartData 对象和其 DataSets
-        barDataSet.setColors(getResources().getColor(R.color.increasing_color), getResources().getColor(R.color.decreasing_color));//设置每条主子的颜色
+        barDataSet.setHighlightEnabled(type != INVISIABLE_LINE);
+        barDataSet.setColors(getResources().getColor(R.color.paleRed), getResources().getColor(R.color.topaz));//设置每条柱子的颜色
         return barDataSet;
     }
 
@@ -295,7 +282,7 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
 
 
     /**
-     * according to the price to refresh the last data of the chart
+     * 刷新最后一个点的价格（不增加数据）
      */
     public void refreshData(float price) {
         if (price <= 0 || price == mLastPrice) {
@@ -317,7 +304,9 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
         mChartPrice.invalidate();
     }
 
-
+    /**
+     * 图表末尾增加一个数据
+     */
     public void addData(HisData hisData) {
         hisData = DataUtils.calculateHisData(hisData, mData);
 //        CombinedData combinedData = mChartPrice.getData();
@@ -360,11 +349,11 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
      * 对齐两张图表
      */
     private void setOffset() {
-        mChartPrice.setViewPortOffsets(0, 0, 0, DisplayUtils.dip2px(mContext, 15));
+        mChartPrice.setViewPortOffsets(0, 0, 0, DisplayUtils.dip2px(getContext(), 15));
         mChartVolume.setViewPortOffsets(0, 0, 0, 0);
 //        int chartHeight = getResources().getDimensionPixelSize(R.dimen.bottom_chart_height);
 //        mChartPrice.setViewPortOffsets(0, 0, 0, chartHeight);
-//        mChartVolume.setViewPortOffsets(0, 0, 0, DisplayUtils.dip2px(mContext, 20));
+//        mChartVolume.setViewPortOffsets(0, 0, 0, DisplayUtils.dip2px(getContext(), 20));
 
 //        float lineLeft = mChartPrice.getViewPortHandler().offsetLeft();
 //        float barLeft = mChartVolume.getViewPortHandler().offsetLeft();
@@ -401,11 +390,14 @@ public class TimeLineView extends BaseView implements CoupleChartGestureListener
         setLimitLine(mLastClose);
     }
 
+    /**
+     * 设置昨天的收盘价，用于计算涨跌幅的坐标
+     */
     public void setLastClose(double lastClose) {
         mLastClose = lastClose;
         setLimitLine();
-        mChartPrice.setOnChartValueSelectedListener(new InfoViewListener(mContext, mLastClose, mData, mChartInfoView, mChartVolume));
-        mChartVolume.setOnChartValueSelectedListener(new InfoViewListener(mContext, mLastClose, mData, mChartInfoView, mChartPrice));
+//        mChartPrice.setOnChartValueSelectedListener(new InfoViewListener(getContext(), mLastClose, mData, mChartInfoView, mChartVolume));
+//        mChartVolume.setOnChartValueSelectedListener(new InfoViewListener(getContext(), mLastClose, mData, mChartInfoView, mChartPrice));
     }
 
 

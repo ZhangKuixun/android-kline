@@ -11,4 +11,27 @@
     <string name="close_price">收盘价</string>
     <string name="high_price">最高价</string>
     <string name="low_price">最低价</string>
+
+    <string name="hostMap">主图</string>
+    <string name="sma">SMA</string>
+    <string name="ema">EMA</string>
+    <string name="boll">BOLL</string>
+    <string name="deputyMap">副图</string>
+    <string name="vol">VOL</string>
+    <string name="macd">MACD</string>
+    <string name="kdj">KDJ</string>
+    <string name="open">开</string>
+    <string name="range">幅</string>
+    <string name="_0_060785">0.060785</string>
+    <string name="_1_96">1.96%</string>
+    <string name="high">高</string>
+    <string name="_0_062096">0.062096</string>
+    <string name="_9333_995145">9333.995145</string>
+    <string name="vol_">额</string>
+    <string name="low">低</string>
+    <string name="_0_061_00">0.061.00</string>
+    <string name="_2018_04_11_08_00">2018-04-11 08:00</string>
+    <string name="buy">收</string>
+    <string name="_0_061211">0.061211</string>
+    <string name="number">数量</string>
 </resources>
