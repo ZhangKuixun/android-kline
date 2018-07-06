@@ -23,11 +23,6 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setOffscreenPageLimit(fragments.length);
         viewPager.setAdapter(new SimpleFragmentPagerAdapter(getSupportFragmentManager(), fragments, titles));
         tabLayout.setupWithViewPager(viewPager);
-        findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FullScreenChartActivity.launch(MainActivity.this, viewPager.getCurrentItem());
-            }
-        });
+        findViewById(R.id.btn).setOnClickListener(v -> FullScreenChartActivity.launch(MainActivity.this, viewPager.getCurrentItem()));
     }
 }
