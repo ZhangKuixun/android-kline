@@ -62,8 +62,9 @@ public class KLineChartFragment extends Fragment {
     private void title(View v) {
         View title = v.findViewById(R.id.rl_title);
         v.findViewById(R.id.back).setOnClickListener(v1 -> Log.e("kevin", "back"));
-        ((ChartInfoView) mKLineView.findViewById(R.id.k_info)).setTitle(title);
-        mKLineView.setTitle(title);
+//        ((ChartInfoView) mKLineView.findViewById(R.id.k_info)).setTitle(title);
+        ChartInfoView k_info = v.findViewById(R.id.k_info);
+        mKLineView.setTitle(title, k_info);
     }
 
     protected void initData() {

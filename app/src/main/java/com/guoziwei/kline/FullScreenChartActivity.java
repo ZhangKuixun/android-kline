@@ -43,7 +43,7 @@ public class FullScreenChartActivity extends AppCompatActivity implements HoursW
         SimpleFragmentPagerAdapter adapter = new SimpleFragmentPagerAdapter(getSupportFragmentManager(), fragments, titles);
         viewPager.setOffscreenPageLimit(fragments.length);
         viewPager.setAdapter(adapter);
-        viewPager.setCurrentItem(getIntent().getIntExtra("index", 3));
+        viewPager.setCurrentItem(getIntent().getIntExtra("index", 1));
 
         mTabLayout.setupWithViewPager(viewPager);
         mTabLayout.addOnTabSelectedListener(this);

@@ -9,7 +9,6 @@
 
 
     <!--图表-->
-
     <color name="marker_color">#be945c</color>
     <color name="marker_text_color">#333333</color>
     <color name="chart_grid_color">#333333</color>

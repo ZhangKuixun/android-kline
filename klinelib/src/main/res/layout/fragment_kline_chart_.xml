@@ -76,12 +76,18 @@
             app:srcCompat="@drawable/ic_close_black_24dp" />
     </RelativeLayout>
 
+    <com.guoziwei.klinelib.chart.KLineChartInfoView
+        android:id="@+id/k_info"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_40"
+        android:visibility="gone" />
+
     <com.guoziwei.klinelib.chart.KLineView
         android:id="@+id/kline"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/rl_title"
         android:layout_marginBottom="@dimen/dp_6"
+        android:layout_marginTop="@dimen/dp_40"
         android:layout_toStartOf="@+id/ll_index" />
 
     <LinearLayout

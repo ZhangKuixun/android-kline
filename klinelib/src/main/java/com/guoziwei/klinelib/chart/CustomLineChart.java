@@ -46,13 +46,11 @@ public class CustomLineChart extends LineChart {
         if (mMarker == null || !isDrawMarkersEnabled() || !valuesToHighlight())
             return;
 
-        for (int i = 0; i < mIndicesToHighlight.length; i++) {
-
-            Highlight highlight = mIndicesToHighlight[i];
+        for (Highlight highlight : mIndicesToHighlight) {
 
             ILineDataSet set = mData.getDataSetByIndex(highlight.getDataSetIndex());
 
-            Entry e = mData.getEntryForHighlight(mIndicesToHighlight[i]);
+            Entry e = mData.getEntryForHighlight(highlight);
             int entryIndex = set.getEntryIndex(e);
 
             // make sure entry not null

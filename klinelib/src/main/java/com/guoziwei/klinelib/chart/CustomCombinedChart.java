@@ -2,6 +2,8 @@ package com.guoziwei.klinelib.chart;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.AttributeSet;
 
 import com.github.mikephil.charting.charts.CombinedChart;
@@ -13,6 +15,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IDataSet;
 import com.github.mikephil.charting.utils.MPPointF;
+import com.guoziwei.klinelib.R;
 
 /**
  * Created by dell on 2017/6/22.
@@ -21,8 +24,9 @@ import com.github.mikephil.charting.utils.MPPointF;
 public class CustomCombinedChart extends CombinedChart {
 
     private IMarker mXMarker;
-
     private float mYCenter;
+    //绘图区域背景色
+    private Paint mBackgroundPaint;
 
     public CustomCombinedChart(Context context) {
         this(context, null);
@@ -34,6 +38,9 @@ public class CustomCombinedChart extends CombinedChart {
 
     public CustomCombinedChart(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        mBackgroundPaint = new Paint();
+        mBackgroundPaint.setStyle(Paint.Style.FILL);
+        mBackgroundPaint.setColor(Color.WHITE);
     }
 
     @Override
@@ -62,13 +69,11 @@ public class CustomCombinedChart extends CombinedChart {
         if (mMarker == null || mXMarker == null || !isDrawMarkersEnabled() || !valuesToHighlight())
             return;
 
-        for (int i = 0; i < mIndicesToHighlight.length; i++) {
-
-            Highlight highlight = mIndicesToHighlight[i];
+        for (Highlight highlight : mIndicesToHighlight) {
 
             IDataSet set = mData.getDataSetByIndex(highlight.getDataSetIndex());
 
-            Entry e = mData.getEntryForHighlight(mIndicesToHighlight[i]);
+            Entry e = mData.getEntryForHighlight(highlight);
             int entryIndex = set.getEntryIndex(e);
 
             // 确保条目不为空
@@ -88,7 +93,8 @@ public class CustomCombinedChart extends CombinedChart {
             // draw marker
             MarkerView xMarker = mXMarker instanceof LineChartXMarkerView ? (LineChartXMarkerView) mXMarker : (KLineChartXMarkerView) mXMarker;
             LineChartYMarkerView yMarker = (LineChartYMarkerView) mMarker;
-            mXMarker.draw(canvas, pos[0] - (xMarker.getMeasuredWidth() / 2), getMeasuredHeight());
+            int chartHeight = getResources().getDimensionPixelSize(R.dimen.bottom_chart_height_bottom_marge);
+            mXMarker.draw(canvas, pos[0] - (xMarker.getMeasuredWidth() / 2), getMeasuredHeight() - chartHeight);
             mMarker.draw(canvas, 0, pos[1] - yMarker.getMeasuredHeight() / 2);
 //            mMarker.draw(canvas, getMeasuredWidth() - yMarker.getMeasuredWidth() * 1.05f, pos[1] - yMarker.getMeasuredHeight() / 2);
         }
@@ -166,6 +172,12 @@ public class CustomCombinedChart extends CombinedChart {
         }
 
         calculateOffsets();
+    }
+
+    @Override
+    protected void drawGridBackground(Canvas c) {
+        super.drawGridBackground(c);
+        c.drawRect(mViewPortHandler.getContentRect(), mBackgroundPaint);
     }
 
     /**

@@ -33,7 +33,6 @@ import com.guoziwei.klinelib.R;
 import com.guoziwei.klinelib.model.HisData;
 import com.guoziwei.klinelib.util.DataUtils;
 import com.guoziwei.klinelib.util.DateUtils;
-import com.guoziwei.klinelib.util.DisplayUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,8 +101,8 @@ public class KLineView extends BaseView implements CoupleChartGestureListener.On
         mChartVolume = findViewById(R.id.vol_chart);
         mChartMacd = findViewById(R.id.macd_chart);
         mChartKdj = findViewById(R.id.kdj_chart);
-        mChartInfoView = findViewById(R.id.k_info);
-        mChartInfoView.setChart(mChartPrice, mChartVolume, mChartMacd, mChartKdj);
+//        mChartInfoView = findViewById(R.id.k_info);
+//        mChartInfoView.setChart(mChartPrice, mChartVolume, mChartMacd, mChartKdj);
 
         mChartPrice.setNoDataText(context.getString(R.string.loading));
         initChartPrice();
@@ -142,6 +141,7 @@ public class KLineView extends BaseView implements CoupleChartGestureListener.On
         mChartPrice.setAutoScaleMinMaxEnabled(true);
         mChartPrice.setDragDecelerationEnabled(false);
         mChartPrice.setBorderColor(getResources().getColor(R.color.silver));
+        mChartPrice.setDrawGridBackground(true);
 
         //marker
         KLineChartXMarkerView mvx = new KLineChartXMarkerView(getContext(), mData);
@@ -209,9 +209,9 @@ public class KLineView extends BaseView implements CoupleChartGestureListener.On
         mChartMacd.setOnChartGestureListener(new CoupleChartGestureListener(this, mChartMacd, mChartPrice));
         mChartKdj.setOnChartGestureListener(new CoupleChartGestureListener(this, mChartKdj, mChartPrice));
         mChartPrice.setOnChartValueSelectedListener(new InfoViewListener(mLastClose, mData, mTitle, mChartInfoView, mChartVolume, mChartMacd, mChartKdj));
-        mChartVolume.setOnChartValueSelectedListener(new InfoViewListener(mLastClose, mData, mTitle, mChartInfoView, mChartPrice));
-        mChartMacd.setOnChartValueSelectedListener(new InfoViewListener(mLastClose, mData, mTitle, mChartInfoView, mChartPrice));
-        mChartKdj.setOnChartValueSelectedListener(new InfoViewListener(mLastClose, mData, mTitle, mChartInfoView, mChartPrice));
+//        mChartVolume.setOnChartValueSelectedListener(new InfoViewListener(mLastClose, mData, mTitle, mChartInfoView, mChartPrice));
+//        mChartMacd.setOnChartValueSelectedListener(new InfoViewListener(mLastClose, mData, mTitle, mChartInfoView, mChartPrice));
+//        mChartKdj.setOnChartValueSelectedListener(new InfoViewListener(mLastClose, mData, mTitle, mChartInfoView, mChartPrice));
 
         //不使用 Fragment 无法点击 bar 显示 marker
         mChartPrice.setOnTouchListener(new ChartInfoViewHandler(mChartPrice));
@@ -618,7 +618,8 @@ public class KLineView extends BaseView implements CoupleChartGestureListener.On
      * 对齐两张图表
      */
     private void setOffset() {
-        mChartPrice.setViewPortOffsets(0, 0, 0, DisplayUtils.dip2px(getContext(), 15));
+        int chartHeight = getResources().getDimensionPixelSize(R.dimen.bottom_chart_height_bottom_marge);
+        mChartPrice.setViewPortOffsets(0, 0, 0, chartHeight);
         mChartVolume.setViewPortOffsets(0, 0, 0, 0);
         mChartMacd.setViewPortOffsets(0, 0, 0, 0);
         mChartKdj.setViewPortOffsets(0, 0, 0, 0);
@@ -643,8 +644,8 @@ public class KLineView extends BaseView implements CoupleChartGestureListener.On
         setLimitLine();
         mChartPrice.setOnChartValueSelectedListener(new InfoViewListener(mLastClose, mData, mTitle, mChartInfoView, mChartVolume, mChartMacd, mChartKdj));
         mChartVolume.setOnChartValueSelectedListener(new InfoViewListener(mLastClose, mData, mTitle, mChartInfoView, mChartPrice, mChartMacd, mChartKdj));
-        mChartMacd.setOnChartValueSelectedListener(new InfoViewListener(mLastClose, mData, mTitle, mChartInfoView, mChartPrice, mChartVolume, mChartKdj));
-        mChartKdj.setOnChartValueSelectedListener(new InfoViewListener(mLastClose, mData, mTitle, mChartInfoView, mChartPrice, mChartVolume, mChartMacd));
+        mChartMacd.setOnChartValueSelectedListener(new InfoViewListener(mLastClose, mData, mTitle, mChartInfoView, mChartPrice,  mChartVolume, mChartKdj));
+        mChartKdj.setOnChartValueSelectedListener(new InfoViewListener(mLastClose, mData, mTitle, mChartInfoView, mChartPrice,   mChartVolume, mChartMacd));
     }
 
 
@@ -666,7 +667,10 @@ public class KLineView extends BaseView implements CoupleChartGestureListener.On
 
     }
 
-    public void setTitle(View title) {
+    public void setTitle(View title, ChartInfoView k_info) {
         mTitle = title;
+        mChartInfoView = k_info;
+        mChartInfoView.setTitle(title);
+        mChartInfoView.setChart(mChartPrice, mChartVolume, mChartMacd, mChartKdj);
     }
 }

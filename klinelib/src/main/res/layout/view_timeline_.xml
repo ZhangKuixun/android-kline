@@ -89,8 +89,7 @@
         android:layout_height="210dp"
         android:layout_marginEnd="@dimen/dp_10"
         android:layout_marginTop="@dimen/dp_40"
-        android:layout_toStartOf="@+id/rl_newTransaction"
-        android:background="@color/white" />
+        android:layout_toStartOf="@+id/rl_newTransaction" />
 
     <com.guoziwei.klinelib.chart.CustomCombinedChart
         android:id="@+id/vol_chart"
